@@ -1,0 +1,4 @@
+{
+  "name": "@SendCV/SendCV",
+  "workspaces": ["pkgs/*"]
+}
