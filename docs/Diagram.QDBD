@@ -1,0 +1,93 @@
+User
+-
+Id PK UUID
+Name String
+Surname String
+Email String
+CreatedAt DateTime
+UpdatedAt DateTime
+
+LatexTemplate
+-
+Id PK UUID
+Code Text
+CreatedAt DateTime
+UpdatedAt DateTime
+
+CV
+-
+Id PK UUID
+Title String
+TemplateId UUID FK - LatexTemplate.Id
+UserId UUID FK - User.Id
+CV_PersonalId UUID FK - CV_Personal.Id
+CV_Contact UUID FK - CV_Contact.Id
+CV_SocialNetworks UUID FK - CV_SocialNetworks.Id
+CV_Languages UUID FK -< CV_Languages.Id
+CV_Education UUID FK -< CV_Education.Id
+CV_Experience UUID FK -< CV_Experience.Id
+CreatedAt DateTime
+UpdatedAt DateTime
+
+CV_Personal
+-
+Id PK UUID
+Name String
+Surname String
+JobTitle String
+Summary String
+UserId UUID FK - User.Id
+CreatedAt DateTime
+UpdatedAt DateTime
+
+CV_Contact
+-
+Id PK UUID
+Email String
+PhoneNumber String
+Website String
+Location String
+UserId UUID FK - User.Id
+CreatedAt DateTime
+UpdatedAt DateTime
+
+CV_SocialNetworks
+-
+Id PK UUID
+LinkedIn String
+Twitter String
+GitHub String
+UserId UUID FK - User.Id
+CreatedAt DateTime
+UpdatedAt DateTime
+
+CV_Experience
+-
+Id PK UUID
+OrganizationName String
+StartDate DateTime
+EndDate DateTime
+Description String
+UserId UUID FK - User.Id
+CreatedAt DateTime
+UpdatedAt DateTime
+
+CV_Education
+-
+Id PK UUID
+InstitutionName String
+StartDate DateTime
+EndDate DateTime
+Description String
+UserId UUID FK - User.Id
+CreatedAt DateTime
+UpdatedAt DateTime
+
+CV_Languages
+-
+Id PK UUID
+Language String
+Level String
+UserId UUID FK - User.Id
+CreatedAt DateTime
+UpdatedAt DateTime
