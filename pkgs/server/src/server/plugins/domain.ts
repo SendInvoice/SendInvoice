@@ -2,16 +2,12 @@ import 'reflect-metadata';
 import fp from 'fastify-plugin';
 import { DataSource } from 'typeorm';
 
-import { Title, TitleService } from '../../modules/title';
-import { Image, ImageService } from '../../modules/images';
-import { Name, NameService, NameProfession } from '../../modules/names';
+import { User, UserService } from '../../modules/user';
 
 import { readConfig } from '../config';
 
 export type DomainServices = {
-  images: ImageService;
-  names: NameService;
-  titles: TitleService;
+  user: UserService;
 };
 
 export const DOMAIN_SERVICES_PLUGIN_NAME = 'domain';
@@ -28,20 +24,15 @@ export const domainServicesPlugin = fp(async (server) => {
       database: config.postgresDb,
       logging: true,
       synchronize: true,
-      entities: [Image, Name, NameProfession, Title]
+      entities: [User]
     });
 
     await appDataSource.connect();
     appDataSource.runMigrations();
 
-    const imageRepository = appDataSource.getRepository(Image);
-    const nameRepository = appDataSource.getRepository(Name);
-    const nameProfessionRepository = appDataSource.getRepository(NameProfession);
-    const titleRepository = appDataSource.getRepository(Title);
+    const userRepository = appDataSource.getRepository(User);
     const domainServices: DomainServices = {
-      images: new ImageService(imageRepository),
-      names: new NameService(nameRepository, nameProfessionRepository),
-      titles: new TitleService(titleRepository),
+      user: new UserService(userRepository),
     };
 
     server.decorate(DOMAIN_SERVICES_PLUGIN_NAME, domainServices);

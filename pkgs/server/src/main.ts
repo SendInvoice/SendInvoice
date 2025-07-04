@@ -16,7 +16,7 @@ async function main(): Promise<void> {
       }
     });
   } catch (err) {
-    console.error('Failed to initialize  "Send CV Server"', err);
+    console.error('Failed to initialize "Send CV Server"', err);
     process.exit(1);
   }
 }
