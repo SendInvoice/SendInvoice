@@ -5,6 +5,13 @@ import { DataSource } from 'typeorm';
 import { User, UserService } from '../../modules/user';
 
 import { readConfig } from '../config';
+import { Entity as CVEntity } from '../../modules/cv';
+import { Education } from '../../modules/cv/entities/Education';
+import { Experience } from '../../modules/cv/entities/Experience';
+import { CV } from '../../modules/cv/entities/CV';
+import { SocialNetwork } from '../../modules/cv/entities/SocialNetwork';
+import { Language } from '../../modules/cv/entities/Language';
+import { Personal } from '../../modules/cv/entities/Personal';
 
 export type DomainServices = {
   user: UserService;
@@ -24,7 +31,7 @@ export const domainServicesPlugin = fp(async (server) => {
       database: config.postgresDb,
       logging: true,
       synchronize: true,
-      entities: [User]
+      entities: [User, CVEntity.CV, CVEntity.Contact, Education, Experience, SocialNetwork, Language, Personal]
     });
 
     await appDataSource.connect();

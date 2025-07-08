@@ -19,7 +19,7 @@ export class UserService {
   }
 
   async createUser(dto: CreateUserDto): Promise<User[]> {
-    const user = new User();
+    const user = new User();  
 
     user.name = dto.name;
     user.surname = dto.surname;
@@ -27,7 +27,7 @@ export class UserService {
 
     const inserted = await this.userRepository.insert(user);
 
-    return this.userRepository.findBy({ id: In([inserted.identifiers]) });
+    return this.userRepository.findBy({ id: In([inserted.identifiers[0].id]) });
   }
 
   async deleteUser(id: string): Promise<boolean> {

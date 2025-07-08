@@ -11,7 +11,6 @@ export const apiV1UserRouter: FastifyPluginCallback = (fastify: FastifyInstance,
         return reply.status(200).send(result);
     });
 
-
     fastify.get<{ Params: Params }>('/:id', async (request, reply) => {
         const id = request?.params.id as string;
 
@@ -29,7 +28,7 @@ export const apiV1UserRouter: FastifyPluginCallback = (fastify: FastifyInstance,
     });
 
     fastify.post('/', async (request, reply) => {
-        const reqBody = JSON.parse(request.body as string) as CreateUserDto;
+        const reqBody = request.body as CreateUserDto;
         const result = await fastify.domain.user.createUser({
             name: reqBody.name,
             surname: reqBody.surname,
@@ -62,6 +61,7 @@ export const apiV1UserRouter: FastifyPluginCallback = (fastify: FastifyInstance,
 //   surname: string;
 //   email: string;
 // }
+
 //   fastify.post<{ Body: CreateUserDto }>('/', async (request, reply) => {
 //     const { name, surname, email } = request.body;
 
