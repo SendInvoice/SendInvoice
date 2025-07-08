@@ -38,6 +38,7 @@ export class UserService {
     return !!inserted.affected;
   }
 
+  // FIXME: Use findById as nameCreateCVParams
   async findBy(id: string): Promise<User[]| null> {
     const user = await this.userRepository.findBy({
       id

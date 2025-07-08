@@ -17,16 +17,16 @@ export class Contact {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column()
+    @Column({ nullable: true })
     email: string;
 
-    @Column()
+    @Column({ nullable: true })
     phoneNumber: string;
 
-    @Column()
+    @Column({ nullable: true })
     website: string;
     
-    @Column()
+    @Column({ nullable: true })
     location: string;
 
     @CreateDateColumn()
