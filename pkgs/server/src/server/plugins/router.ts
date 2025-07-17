@@ -3,11 +3,11 @@ import fp from 'fastify-plugin';
 import { userRoutes } from '../../modules/user';
 
 import type { FastifyInstance } from 'fastify';
-import { cvRoutes } from '../../modules/cv';
+import { invoiceRoutes } from '../../modules/invoice';
 
 export const apiV1RouterPlugin = fp(
   (fastify: FastifyInstance, _, done) => {
-    fastify.register(cvRoutes.v1, {
+    fastify.register(invoiceRoutes.v1, {
       prefix: '/api/v1/cv'
     });
 

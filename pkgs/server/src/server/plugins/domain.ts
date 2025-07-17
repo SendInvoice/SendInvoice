@@ -2,13 +2,14 @@ import 'reflect-metadata';
 import fp from 'fastify-plugin';
 import { DataSource } from 'typeorm';
 
-import { Entity as CVEntity, CVService } from '../../modules/cv';
+import { Entity as InvoiceEntity, InvoiceService } from '../../modules/invoice';
 import { User, UserService } from '../../modules/user';
 
 import { readConfig } from '../config';
+import { Invoice } from '../../modules/invoice/entities/Invoice';
 
 export type DomainServices = {
-  cv: CVService;
+  invoice: InvoiceService;
   user: UserService;
 };
 
@@ -26,17 +27,16 @@ export const domainServicesPlugin = fp(async (server) => {
       database: config.postgresDb,
       logging: true,
       synchronize: true,
-      entities: [User, CVEntity.CV, CVEntity.Contact, CVEntity.Education, CVEntity.Experience, CVEntity.SocialNetwork, CVEntity.Language, CVEntity.Personal]
+      entities: [User, Invoice, ]
     });
 
     await appDataSource.connect();
     appDataSource.runMigrations();
 
-    const cvRepository = appDataSource.getRepository(CVEntity.CV);
-    const contactRepository = appDataSource.getRepository(CVEntity.Contact);
+    const invoiceRepository = appDataSource.getRepository(InvoiceEntity.Invoice);
     const userRepository = appDataSource.getRepository(User);
     const domainServices: DomainServices = {
-      cv: new CVService(cvRepository, contactRepository),
+      invoice: new InvoiceService(invoiceRepository),
       user: new UserService(userRepository),
     };
 
