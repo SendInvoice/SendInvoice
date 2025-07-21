@@ -5,15 +5,17 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany,
+  OneToMany
 } from 'typeorm';
-import { User } from '../../user';
 
+import { User } from '../../user';
 import { Address } from './Address';
 import { Invoice } from './Invoice';
 
+import type { Relation } from 'typeorm';
+
 @Entity({
-     name: 'company' 
+  name: 'company'
 })
 export class Company {
   @PrimaryGeneratedColumn('uuid')
@@ -38,11 +40,11 @@ export class Company {
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.companies)
-  user: User;
+  user: Relation<User>;
 
   @ManyToOne(() => Address, (address) => address.companies)
-  address: Address;
+  address: Relation<Address>;
 
   @OneToMany(() => Invoice, (invoice) => invoice.company)
-  invoices: Invoice[];
+  invoices: Relation<Invoice[]>;
 }

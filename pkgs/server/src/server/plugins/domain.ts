@@ -2,11 +2,9 @@ import 'reflect-metadata';
 import fp from 'fastify-plugin';
 import { DataSource } from 'typeorm';
 
-import { Entity as InvoiceEntity, InvoiceService } from '../../modules/invoice';
-import { User, UserService } from '../../modules/user';
-
 import { readConfig } from '../config';
-import { Invoice } from '../../modules/invoice/entities/Invoice';
+import { User, UserService } from '../../modules/user';
+import { Entity as InvoiceEntity, InvoiceService } from '../../modules/invoice';
 
 export type DomainServices = {
   invoice: InvoiceService;
@@ -27,7 +25,14 @@ export const domainServicesPlugin = fp(async (server) => {
       database: config.postgresDb,
       logging: true,
       synchronize: true,
-      entities: [User, Invoice, ]
+      entities: [
+        User,
+        InvoiceEntity.Address,
+        InvoiceEntity.Company,
+        InvoiceEntity.Invoice,
+        InvoiceEntity.InvoiceItem,
+        InvoiceEntity.Recipient
+      ]
     });
 
     await appDataSource.connect();
@@ -37,7 +42,7 @@ export const domainServicesPlugin = fp(async (server) => {
     const userRepository = appDataSource.getRepository(User);
     const domainServices: DomainServices = {
       invoice: new InvoiceService(invoiceRepository),
-      user: new UserService(userRepository),
+      user: new UserService(userRepository)
     };
 
     server.decorate(DOMAIN_SERVICES_PLUGIN_NAME, domainServices);

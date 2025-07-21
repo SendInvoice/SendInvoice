@@ -5,13 +5,16 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany,
+  OneToMany
 } from 'typeorm';
+
 import { Address } from './Address';
 import { Invoice } from './Invoice';
 
-@Entity({ 
-    name: 'recipient' 
+import type { Relation } from 'typeorm';
+
+@Entity({
+  name: 'recipient'
 })
 export class Recipient {
   @PrimaryGeneratedColumn('uuid')
@@ -30,8 +33,8 @@ export class Recipient {
   updatedAt: Date;
 
   @ManyToOne(() => Address, (address) => address.recipients)
-  address: Address;
+  address: Relation<Address>;
 
   @OneToMany(() => Invoice, (invoice) => invoice.recipientCompany)
-  invoices: Invoice[];
+  invoices: Relation<Invoice[]>;
 }

@@ -5,27 +5,23 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany,
+  OneToMany
 } from 'typeorm';
+
 import { Company } from './Company';
 import { Recipient } from './Recipient';
 import { Address } from './Address';
 import { User } from '../../user';
 import { InvoiceItem } from './InvoiceItem';
 
-@Entity({ 
-    name: 'invoice' 
+import type { Relation } from 'typeorm';
+
+@Entity({
+  name: 'invoice'
 })
 export class Invoice {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @ManyToOne(() => Company, (company) => company.invoices)
-  company: Company;
-
-  @ManyToOne(() => Recipient, (recipient) => recipient.invoices)
-  recipientCompany: Recipient;
-
   @Column()
   invoiceNumber: string;
 
@@ -54,14 +50,20 @@ export class Invoice {
   updatedAt: Date;
 
   @ManyToOne(() => Address, (address) => address.billedInvoices)
-  billToAddress: Address;
+  billToAddress: Relation<Address>;
 
   @ManyToOne(() => Address, (address) => address.shippedInvoices)
-  shipToAddress: Address;
+  shipToAddress: Relation<Address>;
 
   @ManyToOne(() => User, (user) => user.invoices)
-  user: User;
+  user: Relation<User>;
 
   @OneToMany(() => InvoiceItem, (item) => item.invoice, { cascade: true })
-  items: InvoiceItem[];
+  items: Relation<InvoiceItem[]>;
+
+  @ManyToOne(() => Company, (company) => company.invoices)
+  company: Relation<Company>;
+
+  @ManyToOne(() => Recipient, (recipient) => recipient.invoices)
+  recipientCompany: Relation<Recipient>;
 }

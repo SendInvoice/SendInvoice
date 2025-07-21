@@ -2,8 +2,19 @@ import { In, Repository } from 'typeorm';
 
 import { User } from './entity';
 
-export type CreateUserDto = Omit<User, 'id' | 'contact' | 'personal' |
- 'socialNetwork' | 'experience' | 'education' | 'language' | 'cv' | 'createdAt' |'updatedAt'>;
+export type CreateUserDto = Omit<
+  User,
+  | 'id'
+  | 'contact'
+  | 'personal'
+  | 'socialNetwork'
+  | 'experience'
+  | 'education'
+  | 'language'
+  | 'cv'
+  | 'createdAt'
+  | 'updatedAt'
+>;
 
 export class UserService {
   private userRepository: Repository<User>;
@@ -19,7 +30,7 @@ export class UserService {
   }
 
   async createUser(dto: CreateUserDto): Promise<User[]> {
-    const user = new User();  
+    const user = new User();
 
     user.name = dto.name;
     user.surname = dto.surname;
@@ -39,7 +50,7 @@ export class UserService {
   }
 
   // FIXME: Use findById as nameCreateCVParams
-  async findBy(id: string): Promise<User[]| null> {
+  async findBy(id: string): Promise<User[] | null> {
     const user = await this.userRepository.findBy({
       id
     });

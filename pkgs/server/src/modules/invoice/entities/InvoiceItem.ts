@@ -4,19 +4,19 @@ import {
   Column,
   ManyToOne,
   CreateDateColumn,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from 'typeorm';
+
 import { Invoice } from './Invoice';
 
-@Entity({ 
-    name: 'invoice_item' 
+import type { Relation } from 'typeorm';
+
+@Entity({
+  name: 'invoice_item'
 })
 export class InvoiceItem {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @ManyToOne(() => Invoice, (invoice) => invoice.items)
-  invoice: Invoice;
 
   @Column('float')
   amount: number;
@@ -35,4 +35,7 @@ export class InvoiceItem {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => Invoice, (invoice) => invoice.items)
+  invoice: Relation<Invoice>;
 }

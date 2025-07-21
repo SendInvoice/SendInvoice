@@ -1,4 +1,3 @@
-
 export { Address } from './Address';
 export { Company } from './Company';
 export { Invoice } from './Invoice';

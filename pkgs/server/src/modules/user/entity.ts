@@ -4,14 +4,13 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
+  OneToMany
 } from 'typeorm';
 import { Invoice } from '../invoice/entities/Invoice';
 import { Company } from '../invoice/entities/Company';
 
-
-@Entity({ 
-  name: 'user' 
+@Entity({
+  name: 'user'
 })
 export class User {
   @PrimaryGeneratedColumn('uuid')

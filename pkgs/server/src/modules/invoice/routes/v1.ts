@@ -2,59 +2,58 @@ import type { FastifyInstance, FastifyPluginCallback } from 'fastify';
 import type { CreateInvoiceDto } from '../service';
 
 type Params = {
-    id: string;
+  id: string;
 };
 
 export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstance, _, done) => {
-    fastify.get('/', async (_, reply) => {
-        const result = await fastify.domain.user.getUser();
-        return reply.status(200).send(result);
+  fastify.get('/', async (_, reply) => {
+    const result = await fastify.domain.user.getUser();
+    return reply.status(200).send(result);
+  });
+
+  fastify.get<{ Params: Params }>('/:id', async (request, reply) => {
+    const id = request?.params.id as string;
+
+    if (!id) {
+      return reply.status(400).send({ message: 'Id is required' });
+    }
+
+    const maybeUser = await fastify.domain.user.findBy(id);
+
+    if (!maybeUser) {
+      return reply.status(400).send({ message: 'Title not found' });
+    }
+
+    return reply.status(200).send(maybeUser);
+  });
+
+  fastify.post('/', async (request, reply) => {
+    const reqBody = request.body as CreateInvoiceDto;
+    const result = await fastify.domain.user.createUser({
+      name: reqBody.name,
+      surname: reqBody.surname,
+      email: reqBody.email
     });
 
-    fastify.get<{ Params: Params }>('/:id', async (request, reply) => {
-        const id = request?.params.id as string;
+    return reply.status(201).send(result);
+  });
 
-        if (!id) {
-            return reply.status(400).send({ message: 'Id is required' });
-        }
+  fastify.delete('/:id', async (request, reply) => {
+    const id = (request?.params as unknown as { id?: string })?.id as string;
 
-        const maybeUser = await fastify.domain.user.findBy(id);
+    if (!id) {
+      return reply.status(400).send({ message: 'Id is required' });
+    }
 
-        if (!maybeUser) {
-            return reply.status(400).send({ message: 'Title not found' });
-        }
+    await fastify.domain.user.deleteUser(id);
 
-        return reply.status(200).send(maybeUser);
-    });
+    return reply.status(200).send({ message: 'Title deleted' });
+  });
 
-    fastify.post('/', async (request, reply) => {
-        const reqBody = request.body as CreateInvoiceDto;
-        const result = await fastify.domain.user.createUser({
-            name: reqBody.name,
-            surname: reqBody.surname,
-            email: reqBody.email,
-        });
-
-        return reply.status(201).send(result);
-    });
-
-    fastify.delete('/:id', async (request, reply) => {
-        const id = (request?.params as unknown as { id?: string })?.id as string;
-
-        if (!id) {
-            return reply.status(400).send({ message: 'Id is required' });
-        }
-
-        await fastify.domain.user.deleteUser(id);
-
-        return reply.status(200).send({ message: 'Title deleted' });
-    });
-
-    done();
+  done();
 };
 
-
-// Posible way to improve code. 
+// Posible way to improve code.
 
 // export interface CreateUserDto {
 //   name: string;
