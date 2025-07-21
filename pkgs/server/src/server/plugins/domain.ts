@@ -5,8 +5,11 @@ import { DataSource } from 'typeorm';
 import { readConfig } from '../config';
 import { User, UserService } from '../../modules/user';
 import { Entity as InvoiceEntity, InvoiceService } from '../../modules/invoice';
+import { Token } from '../../modules/auth/entity';
+import { AuthService } from '../../modules/auth';
 
 export type DomainServices = {
+  auth: AuthService;
   invoice: InvoiceService;
   user: UserService;
 };
@@ -31,18 +34,22 @@ export const domainServicesPlugin = fp(async (server) => {
         InvoiceEntity.Company,
         InvoiceEntity.Invoice,
         InvoiceEntity.InvoiceItem,
-        InvoiceEntity.Recipient
+        InvoiceEntity.Recipient,
+        Token
       ]
     });
 
     await appDataSource.connect();
-    appDataSource.runMigrations();
-
+    appDataSource.runMigrations();  
+    
+    const tokenRepository = appDataSource.getRepository(Token)
     const invoiceRepository = appDataSource.getRepository(InvoiceEntity.Invoice);
     const userRepository = appDataSource.getRepository(User);
+    const userService = new UserService(userRepository);
     const domainServices: DomainServices = {
+      auth: new AuthService(tokenRepository, userService),
       invoice: new InvoiceService(invoiceRepository),
-      user: new UserService(userRepository)
+      user: userService
     };
 
     server.decorate(DOMAIN_SERVICES_PLUGIN_NAME, domainServices);

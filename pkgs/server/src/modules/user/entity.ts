@@ -4,10 +4,12 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany
+  OneToMany,
+  type Relation
 } from 'typeorm';
 import { Invoice } from '../invoice/entities/Invoice';
 import { Company } from '../invoice/entities/Company';
+import { Token } from '../auth/entity';
 
 @Entity({
   name: 'user'
@@ -32,8 +34,11 @@ export class User {
   updatedAt: Date;
 
   @OneToMany(() => Company, (company) => company.user)
-  companies: Company[];
+  companies: Relation<Company[]>;
 
   @OneToMany(() => Invoice, (invoice) => invoice.user)
-  invoices: Invoice[];
+  invoices: Relation<Invoice>;
+
+  @OneToMany(() => Token, (token) => token.user)
+  tokens: Relation<Token[]>;
 }

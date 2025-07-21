@@ -6,7 +6,51 @@ type Params = {
 };
 
 export const apiV1UserRouter: FastifyPluginCallback = (fastify: FastifyInstance, _, done) => {
-  fastify.get('/', async (_, reply) => {
+  fastify.get('/whoami', async (request, reply) => {
+    const headers = request.headers;
+    const authHeader = headers.authorization;
+
+    if (authHeader?.toLowerCase()?.startsWith('bearer')) {
+      const parts = authHeader.split(' ');
+      const tokenStr = parts[1];
+
+      if (!tokenStr) {
+        return reply.code(401).send({
+          message: 'Unauthorized.',
+        });
+      }
+
+      const maybeToken = await fastify.domain.auth.findByToken(tokenStr);
+
+      if (!maybeToken) {
+        return reply.code(401).send({
+          message: 'Unauthorized. Invalid token.',
+        });
+      }
+
+      if (Array.isArray(maybeToken) && maybeToken.length != 1) {
+        if (!maybeToken.length) {
+          return reply.code(401).send({
+            message: 'Unauthorized. Invalid token.',
+          });
+        }
+
+        return reply.code(500).send({
+          message: 'More than one token was found in the response.',
+        });
+      }
+
+      const token = maybeToken[0];
+
+      if (!token.user) {
+        return reply.code(500).send({
+          message: 'User was not found in the response.',
+        });
+      }
+
+      return token.user;
+    }
+
     const result = await fastify.domain.user.getUser();
     return reply.status(200).send(result);
   });

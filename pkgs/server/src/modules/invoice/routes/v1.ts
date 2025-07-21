@@ -18,7 +18,7 @@ export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstan
       return reply.status(400).send({ message: 'Id is required' });
     }
 
-    const maybeUser = await fastify.domain.user.findBy(id);
+    const maybeUser = await fastify.domain.user.findById(id);
 
     if (!maybeUser) {
       return reply.status(400).send({ message: 'Title not found' });
@@ -27,16 +27,16 @@ export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstan
     return reply.status(200).send(maybeUser);
   });
 
-  fastify.post('/', async (request, reply) => {
-    const reqBody = request.body as CreateInvoiceDto;
-    const result = await fastify.domain.user.createUser({
-      name: reqBody.name,
-      surname: reqBody.surname,
-      email: reqBody.email
-    });
+  // fastify.post('/', async (request, reply) => {
+  //   const reqBody = request.body as CreateInvoiceDto;
+  //   const result = await fastify.domain.user.createUser({
+  //     name: reqBody.name,
+  //     surname: reqBody.surname,
+  //     email: reqBody.email
+  //   });
 
-    return reply.status(201).send(result);
-  });
+  //   return reply.status(201).send(result);
+  // });
 
   fastify.delete('/:id', async (request, reply) => {
     const id = (request?.params as unknown as { id?: string })?.id as string;

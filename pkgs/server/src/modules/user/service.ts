@@ -50,9 +50,21 @@ export class UserService {
   }
 
   // FIXME: Use findById as nameCreateCVParams
-  async findBy(id: string): Promise<User[] | null> {
+  async findById(id: string): Promise<User[] | null> {
     const user = await this.userRepository.findBy({
       id
+    });
+
+    if (!user) {
+      return null;
+    } else {
+      return user;
+    }
+  }
+
+  async findByEmail(email: string): Promise<User[] | null> {
+    const user = await this.userRepository.findBy({
+      email
     });
 
     if (!user) {
