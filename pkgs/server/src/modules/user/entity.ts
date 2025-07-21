@@ -4,21 +4,14 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
-  type Relation,
-
+  OneToMany
 } from 'typeorm';
+import { Invoice } from '../invoice/entities/Invoice';
+import { Company } from '../invoice/entities/Company';
 
-import { CV } from '../cv/entities/CV';
-import { Contact } from '../cv/entities/Contact';
-import { Personal } from '../cv/entities/Personal';
-import { SocialNetwork } from '../cv/entities/SocialNetwork';
-import { Experience } from '../cv/entities/Experience';
-import { Education } from '../cv/entities/Education';
-import { Language} from '../cv/entities/Language';
-
-@Entity({ name: 'users' })
-
+@Entity({
+  name: 'user'
+})
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -33,29 +26,14 @@ export class User {
   email: string;
 
   @CreateDateColumn()
-  createdAt: string;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: string;
+  updatedAt: Date;
 
-  @OneToMany(() => CV, (cv) => cv.user)
-  cv: Relation<CV[]>;
+  @OneToMany(() => Company, (company) => company.user)
+  companies: Company[];
 
-  @OneToMany(() => Contact, (contact) => contact.user)
-  contact: Relation<Contact[]>;
-
-  @OneToMany(() => Personal, (personal) => personal.user)
-  personal: Relation<Personal[]>;
-
-  @OneToMany(() => SocialNetwork, (social) => social.user)
-  socialNetwork: Relation<SocialNetwork[]>;
-
-  @OneToMany(() => Experience, (experience) => experience.user)
-  experience: Relation<Experience[]>;
-
-  @OneToMany(() => Education, (education) => education.user)
-  education: Relation<Education[]>;
-
-  @OneToMany(() => Language, (language) => language.user)
-  language: Relation<Language[]>;
+  @OneToMany(() => Invoice, (invoice) => invoice.user)
+  invoices: Invoice[];
 }

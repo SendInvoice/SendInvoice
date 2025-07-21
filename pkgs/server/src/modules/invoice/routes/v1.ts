@@ -1,11 +1,11 @@
 import type { FastifyInstance, FastifyPluginCallback } from 'fastify';
-import type { CreateUserDto } from '../service';
+import type { CreateInvoiceDto } from '../service';
 
 type Params = {
   id: string;
 };
 
-export const apiV1UserRouter: FastifyPluginCallback = (fastify: FastifyInstance, _, done) => {
+export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstance, _, done) => {
   fastify.get('/', async (_, reply) => {
     const result = await fastify.domain.user.getUser();
     return reply.status(200).send(result);
@@ -28,7 +28,7 @@ export const apiV1UserRouter: FastifyPluginCallback = (fastify: FastifyInstance,
   });
 
   fastify.post('/', async (request, reply) => {
-    const reqBody = request.body as CreateUserDto;
+    const reqBody = request.body as CreateInvoiceDto;
     const result = await fastify.domain.user.createUser({
       name: reqBody.name,
       surname: reqBody.surname,
