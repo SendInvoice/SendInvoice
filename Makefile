@@ -3,6 +3,9 @@
 default:
 	@echo "No default recipe."
 
+client:
+	NEXT_TELEMETRY_DISABLED=1 cd ./pkgs/client && bun run dev
+
 serve:
 	bun --inspect run ./pkgs/server/src/main.ts
 
