@@ -10,7 +10,7 @@ async function main(): Promise<void> {
     const server = await makeServer();
 
     await server.listen({
-      port: 3000,
+      port: 8080,
       listenTextResolver: (addr) => {
         return `"Send CV Server" Listening at ${addr}`;
       }
