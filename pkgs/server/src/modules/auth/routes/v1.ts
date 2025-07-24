@@ -7,7 +7,14 @@ export const apiV1AuthRouter: FastifyPluginCallback = (fastify: FastifyInstance,
   });
 
   fastify.post('/sign-up', async (request, reply) => {
-    const reqBody = request.body as {email: string};
+    const reqBody = request.body as { email: string };
+    const result = await fastify.domain.auth.createToken(reqBody.email);
+
+    return reply.status(201).send(result);
+  });
+
+  fastify.post('/log-in', async (request, reply) => {
+    const reqBody = request.body as { email: string };
     const result = await fastify.domain.auth.createToken(reqBody.email);
 
     return reply.status(201).send(result);

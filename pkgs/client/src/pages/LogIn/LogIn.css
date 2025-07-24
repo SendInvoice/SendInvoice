@@ -1,0 +1,6 @@
+.log-in_container form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 3px;
+    margin: auto;
+}

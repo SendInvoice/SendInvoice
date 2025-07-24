@@ -1,40 +1,37 @@
 import { FormEvent, useState } from 'react'
 
-import './SignUp.css'
+import './LogIn.css'
 
-export default function SignUp() {
+export default function LogIn() {
   const [isDone, setDone] = useState(false);
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
     console.table({
-      name,
-      surname,
       email
     });
 
-    const res = await fetch('http://localhost:8080/api/v1/user', {
+    const res = await fetch('http://localhost:8080/api/v1/auth/log-in', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        name,
-        surname,
         email
       }),
     });
 
-    if (res.status === 201) {  
+    if (res.ok) {
+      const resBody = await res.json();
+
+      console.log(resBody);
       setDone(true);
     }
   };
 
   return (
-    <div className='sign-up_container'>
+    <div className='log-in_container'>
 
       {
         isDone ? (
@@ -42,20 +39,6 @@ export default function SignUp() {
         ) : (
 
           <form onSubmit={handleSubmit}>
-            <label>Enter your name:
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </label>
-            <label>Enter your surname:
-              <input
-                type="text"
-                value={surname}
-                onChange={(e) => setSurname(e.target.value)}
-              />
-            </label>
             <label>Enter your email:
               <input
                 type="text"
@@ -63,7 +46,7 @@ export default function SignUp() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </label>
-            <button type='submit'>Registrarse</button>
+            <button type='submit'>Enter</button>
           </form>
         )
       }
