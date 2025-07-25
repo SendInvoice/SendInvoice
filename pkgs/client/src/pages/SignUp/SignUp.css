@@ -1,6 +1,17 @@
 .sign-up_container form {
+    /* display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    background: #535353;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1); */
+}
+
+.sign-up_form {
     display: flex;
     flex-direction: column;
-    margin-bottom: 3px;
-    margin: auto;
+    gap: 1rem;
+    padding: 1rem;
 }

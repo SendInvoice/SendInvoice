@@ -1,6 +1,17 @@
+.log-in_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .log-in_container form {
     display: flex;
     flex-direction: column;
-    margin-bottom: 3px;
-    margin: auto;
+    align-items: center;
+    gap: 12px;
+    padding: 24px;
+    background: #535353;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
+

@@ -1,6 +1,8 @@
 import { FormEvent, useState } from 'react'
 
 import './LogIn.css'
+import { Input } from '../../components/atoms/Input.tsx';
+import { Button } from '../../components/atoms/Button.tsx/index.tsx';
 
 export default function LogIn() {
   const [isDone, setDone] = useState(false);
@@ -37,17 +39,24 @@ export default function LogIn() {
         isDone ? (
           <div>DONE</div>
         ) : (
-
-          <form onSubmit={handleSubmit}>
-            <label>Enter your email:
-              <input
-                type="text"
+          <div>
+            <h2> Log In </h2>
+            <p>Dont have an account yet? Sing Up!</p>
+            <form onSubmit={handleSubmit}>
+              <Input
+                className='input-field'
+                type='email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder='Email Address'
               />
-            </label>
-            <button type='submit'>Enter</button>
-          </form>
+              <Button
+                className='button_form'
+                type='submit'>
+                Enter
+              </Button>
+            </form>
+          </div>
         )
       }
     </div>

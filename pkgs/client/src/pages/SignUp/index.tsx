@@ -1,6 +1,8 @@
 import { FormEvent, useState } from 'react'
 
 import './SignUp.css'
+import { Input } from '../../components/atoms/Input';
+import { Button } from '../../components/atoms/Button';
 
 export default function SignUp() {
   const [isDone, setDone] = useState(false);
@@ -28,7 +30,7 @@ export default function SignUp() {
       }),
     });
 
-    if (res.status === 201) {  
+    if (res.status === 201) {
       setDone(true);
     }
   };
@@ -40,31 +42,38 @@ export default function SignUp() {
         isDone ? (
           <div>DONE</div>
         ) : (
-
-          <form onSubmit={handleSubmit}>
-            <label>Enter your name:
-              <input
-                type="text"
+          <div>
+            <h2> Create an Account </h2>
+            <p>Already have an account? Login.</p>
+            <form className='sign-up_form' onSubmit={handleSubmit}>
+              <Input
+                className='input-field'
+                type='text'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                placeholder='Name'
               />
-            </label>
-            <label>Enter your surname:
-              <input
-                type="text"
+              <Input
+                className='input-field'
+                type='text'
                 value={surname}
                 onChange={(e) => setSurname(e.target.value)}
+                placeholder='Surname'
               />
-            </label>
-            <label>Enter your email:
-              <input
-                type="text"
+              <Input
+                className='input-field'
+                type='email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder='Email Address'
               />
-            </label>
-            <button type='submit'>Registrarse</button>
-          </form>
+              <Button
+                className='button_form'
+                type='submit'>
+                Sing Up
+              </Button>
+            </form>
+          </div>
         )
       }
     </div>
