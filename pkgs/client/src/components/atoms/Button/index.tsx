@@ -12,14 +12,12 @@ type ButtonProps = {
 
 export const Button: React.FC<ButtonProps> = (props) => {
   return (
-    <div className="button">
-        <button
-          className={props.className}
-          type={props.type || 'button'}
-          onClick={props.onClick}
-        >
-            {props.children}
-        </button>
-    </div>
+      <button
+        className={`button ${props.className}`}
+        type={props.type || 'button'}
+        onClick={props.onClick}
+      >
+          {props.children}
+      </button>
   );
 };

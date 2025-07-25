@@ -18,22 +18,22 @@ export default function Auth() {
                 authState === AuthState.Login ? (
                     <div>
                         <LogIn />
-                        <p>Dont have an account yet?
+                        <span>Dont have an account yet?
                             <button
                                 className='auth-container_button'
                                 onClick={() => setAuthState(AuthState.SignUp)}>
                                 Sign Up!
-                            </button></p>
+                            </button></span>
                     </div>
                 ) : (
                     <div>
                         <SignUp />
-                        <p>Already have an account?
+                        <span>Already have an account?
                             <button
                                 className='auth-container_button'
                                 onClick={() => setAuthState(AuthState.Login)}>
                                 Login.
-                            </button></p>
+                            </button></span>
                     </div>
                 )
             }

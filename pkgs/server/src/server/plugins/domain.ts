@@ -40,9 +40,9 @@ export const domainServicesPlugin = fp(async (server) => {
     });
 
     await appDataSource.connect();
-    appDataSource.runMigrations();  
-    
-    const tokenRepository = appDataSource.getRepository(Token)
+    appDataSource.runMigrations();
+
+    const tokenRepository = appDataSource.getRepository(Token);
     const invoiceRepository = appDataSource.getRepository(InvoiceEntity.Invoice);
     const userRepository = appDataSource.getRepository(User);
     const userService = new UserService(userRepository);

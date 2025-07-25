@@ -1,5 +1,4 @@
 import type { FastifyInstance, FastifyPluginCallback } from 'fastify';
-import type { CreateInvoiceDto } from '../service';
 
 type Params = {
   id: string;
