@@ -22,4 +22,3 @@ export const apiV1AuthRouter: FastifyPluginCallback = (fastify: FastifyInstance,
 
   done();
 };
-

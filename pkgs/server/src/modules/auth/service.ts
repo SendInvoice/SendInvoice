@@ -1,8 +1,8 @@
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { Token } from './entity';
 
-import { User, UserService } from '../user';
+import { UserService } from '../user';
 
 export class AuthService {
   private tokenRepository: Repository<Token>;
@@ -13,7 +13,7 @@ export class AuthService {
     this.userService = userService;
   }
 
-  async createToken(email: string): Promise<Token> { 
+  async createToken(email: string): Promise<Token> {
     const token = new Token();
     const users = await this.userService.findByEmail(email);
 
@@ -29,16 +29,16 @@ export class AuthService {
 
     token.token = 'random';
     token.user = user;
-    
+
     return await this.tokenRepository.save(token);
   }
 
-  async findByToken(tokenStr: string): Promise<Token[] | null> { 
+  async findByToken(tokenStr: string): Promise<Token[] | null> {
     const token = await this.tokenRepository.find({
-       where: {
-        token: tokenStr,
+      where: {
+        token: tokenStr
       },
-      relations: ['user'],
+      relations: ['user']
     });
 
     if (!token) {
@@ -47,5 +47,4 @@ export class AuthService {
       return token;
     }
   }
-
 }

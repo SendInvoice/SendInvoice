@@ -26,6 +26,6 @@ export class Token {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.tokens, {nullable:false})
+  @ManyToOne(() => User, (user) => user.tokens, { nullable: false })
   user: Relation<User>;
 }

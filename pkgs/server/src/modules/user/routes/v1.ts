@@ -16,7 +16,7 @@ export const apiV1UserRouter: FastifyPluginCallback = (fastify: FastifyInstance,
 
       if (!tokenStr) {
         return reply.code(401).send({
-          message: 'Unauthorized.',
+          message: 'Unauthorized.'
         });
       }
 
@@ -24,19 +24,19 @@ export const apiV1UserRouter: FastifyPluginCallback = (fastify: FastifyInstance,
 
       if (!maybeToken) {
         return reply.code(401).send({
-          message: 'Unauthorized. Invalid token.',
+          message: 'Unauthorized. Invalid token.'
         });
       }
 
       if (Array.isArray(maybeToken) && maybeToken.length != 1) {
         if (!maybeToken.length) {
           return reply.code(401).send({
-            message: 'Unauthorized. Invalid token.',
+            message: 'Unauthorized. Invalid token.'
           });
         }
 
         return reply.code(500).send({
-          message: 'More than one token was found in the response.',
+          message: 'More than one token was found in the response.'
         });
       }
 
@@ -44,7 +44,7 @@ export const apiV1UserRouter: FastifyPluginCallback = (fastify: FastifyInstance,
 
       if (!token.user) {
         return reply.code(500).send({
-          message: 'User was not found in the response.',
+          message: 'User was not found in the response.'
         });
       }
 
