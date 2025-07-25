@@ -1,14 +1,11 @@
-import './App.css'
+import Auth from './pages/Auth';
 
-import LogIn from './pages/LogIn'
-import SignUp from './pages/SignUp'
+import './App.css';
 
 function App() {
   return (
     <>
-      <SignUp />
-      <br />
-      <LogIn />
+      <Auth />
     </>
   )
 }

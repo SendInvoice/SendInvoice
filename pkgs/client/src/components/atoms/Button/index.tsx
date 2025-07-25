@@ -1,15 +1,13 @@
 import React from 'react';
 
-import type { JSX } from 'react';
-
 import './Button.css';
 
 type ButtonProps = {
   className: string;
-  children: JSX.Element 
+  children: React.ReactNode;
   label?: string;
   type?: 'button' | 'submit';
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export const Button: React.FC<ButtonProps> = (props) => {

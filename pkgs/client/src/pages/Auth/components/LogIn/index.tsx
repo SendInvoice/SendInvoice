@@ -1,8 +1,10 @@
-import { FormEvent, useState } from 'react'
+import { useState, type FormEvent } from 'react';
 
-import './LogIn.css'
-import { Input } from '../../components/atoms/Input.tsx';
-import { Button } from '../../components/atoms/Button.tsx/index.tsx';
+import { Input } from '../../../../components/atoms/Input';
+import { Button } from '../../../../components/atoms/Button';
+import { Form } from '../../../../components/atoms/Form';
+
+import './LogIn.css';
 
 export default function LogIn() {
   const [isDone, setDone] = useState(false);
@@ -41,8 +43,7 @@ export default function LogIn() {
         ) : (
           <div>
             <h2> Log In </h2>
-            <p>Dont have an account yet? Sing Up!</p>
-            <form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit}>
               <Input
                 className='input-field'
                 type='email'
@@ -55,7 +56,7 @@ export default function LogIn() {
                 type='submit'>
                 Enter
               </Button>
-            </form>
+            </Form>
           </div>
         )
       }
