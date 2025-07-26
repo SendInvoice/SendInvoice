@@ -5,13 +5,6 @@ import { User } from './entity';
 export type CreateUserDto = Omit<
   User,
   | 'id'
-  | 'contact'
-  | 'personal'
-  | 'socialNetwork'
-  | 'experience'
-  | 'education'
-  | 'language'
-  | 'cv'
   | 'createdAt'
   | 'updatedAt'
 >;

@@ -96,26 +96,3 @@ export const apiV1UserRouter: FastifyPluginCallback = (fastify: FastifyInstance,
 
   done();
 };
-
-// Posible way to improve code.
-
-// export interface CreateUserDto {
-//   name: string;
-//   surname: string;
-//   email: string;
-// }
-
-//   fastify.post<{ Body: CreateUserDto }>('/', async (request, reply) => {
-//     const { name, surname, email } = request.body;
-
-//     const result = await fastify.domain.user.createUser({
-//       name,
-//       surname,
-//       email,
-//     });
-
-//     return reply.status(201).send(result);
-//   });
-
-//   done();
-// };

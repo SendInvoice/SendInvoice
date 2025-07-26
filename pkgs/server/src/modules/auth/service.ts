@@ -1,4 +1,5 @@
 import { Repository } from 'typeorm';
+import { randomUUID } from 'crypto';
 
 import { Token } from './entity';
 
@@ -27,7 +28,7 @@ export class AuthService {
 
     const user = users[0];
 
-    token.token = 'random';
+    token.token = randomUUID();
     token.user = user;
 
     return await this.tokenRepository.save(token);
