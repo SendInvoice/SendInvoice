@@ -28,9 +28,13 @@ export default function LogIn() {
 
     if (res.ok) {
       const resBody = await res.json();
-
       console.log(resBody);
+
+      localStorage.setItem('authToken', resBody.token);
+
       setDone(true);
+    } else { 
+      console.error('Error during login');
     }
   };
 
