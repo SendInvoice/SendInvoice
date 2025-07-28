@@ -8,12 +8,12 @@ import type { FastifyInstance } from 'fastify';
 
 export const apiV1RouterPlugin = fp(
   (fastify: FastifyInstance, _, done) => {
-    fastify.register(authRoutes.v1, {
-      prefix: '/api/v1/auth'
+    fastify.register(invoiceRoutes.v1, {
+      prefix: '/api/v1/invoice'
     });
 
-    fastify.register(invoiceRoutes.v1, {
-      prefix: '/api/v1/cv'
+    fastify.register(authRoutes.v1, {
+      prefix: '/api/v1/auth'
     });
 
     fastify.register(userRoutes.v1, {

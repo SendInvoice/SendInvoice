@@ -8,10 +8,12 @@ import './LogIn.css';
 
 export default function LogIn() {
   const [isDone, setDone] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [email, setEmail] = useState("");
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
+    setErrorMessage(null);
     console.table({
       email
     });
@@ -33,8 +35,8 @@ export default function LogIn() {
       localStorage.setItem('authToken', resBody.token);
 
       setDone(true);
-    } else { 
-      console.error('Error during login');
+    } else {
+      setErrorMessage('Error during login');
     }
   };
 
@@ -43,7 +45,7 @@ export default function LogIn() {
 
       {
         isDone ? (
-          <div>DONE</div>
+          <div>We have sent an email for you to enter!</div>
         ) : (
           <div>
             <h2> Log In </h2>
@@ -55,6 +57,11 @@ export default function LogIn() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder='Email Address'
               />
+
+              {errorMessage && (
+                <p className="error-message">{errorMessage}</p>
+              )}
+
               <Button
                 className='button_form'
                 type='submit'>
