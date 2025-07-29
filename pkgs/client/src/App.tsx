@@ -1,4 +1,5 @@
-import { Route, Routes } from 'react-router-dom';
+import { StrictMode } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
@@ -7,10 +8,14 @@ import './App.css';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/Auth" element={ <Auth/> }/>
-      <Route path="/Dashboard" element={ <Dashboard/> } />
-    </Routes>
+    <StrictMode>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/" element={<Dashboard />} />
+        </Routes>
+      </BrowserRouter>
+    </StrictMode>
   )
 }
 
