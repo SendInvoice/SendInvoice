@@ -1,0 +1,14 @@
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+}
+
+.h1-dashboard {
+  margin-left: 1.25rem;
+}
