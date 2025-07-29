@@ -12,11 +12,11 @@ async function main(): Promise<void> {
     await server.listen({
       port: 8080,
       listenTextResolver: (addr) => {
-        return `"Send CV Server" Listening at ${addr}`;
+        return `"Send Invoice Server" Listening at ${addr}`;
       }
     });
   } catch (err) {
-    console.error('Failed to initialize "Send CV Server"', err);
+    console.error('Failed to initialize "Send Invoice Server"', err);
     process.exit(1);
   }
 }
