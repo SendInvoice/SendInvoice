@@ -1,4 +1,7 @@
 {
   "name": "@SendCV/SendCV",
-  "workspaces": ["pkgs/*"]
+  "workspaces": ["pkgs/*"],
+  "dependencies": {
+    "react-icons": "^5.5.0"
+  }
 }
