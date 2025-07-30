@@ -1,0 +1,39 @@
+.dashboard-layout {
+  height: 100vh;
+}
+
+.h1-dashboard {
+  margin-left: 1.25rem;
+}
+
+.content-area {
+  display: flex;
+  justify-content: center;
+}
+
+.icon {
+  margin-top: 5px;
+  align-items: center;
+  font-size: 1.2rem;
+  flex-direction: column-reverse;
+  display:flex;
+  justify-self: auto;
+  justify-content: baseline;
+}
+
+.dashboard-link {
+    border: none;
+    border-radius: 0.6rem;
+    background-color: blueviolet;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    margin: 1.25rem;
+    padding: 1.25rem;
+    width:50%;
+}
+
+.dashboard-link:hover {
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+    transform: scale(1.008);
+}

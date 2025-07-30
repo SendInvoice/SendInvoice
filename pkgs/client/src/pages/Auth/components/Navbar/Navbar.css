@@ -1,0 +1,27 @@
+.navbar {
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: #ece8e8;
+  border-bottom: 1px solid blueviolet;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  height: 3rem;
+}
+
+.navbar-button {
+  background-color: transparent;
+  border:none;
+  cursor: pointer;
+  width: 4rem;
+  display:flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-button:hover {
+  transform: scale(1.008);
+  color:blueviolet;
+}
