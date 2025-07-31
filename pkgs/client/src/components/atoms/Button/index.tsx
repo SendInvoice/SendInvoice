@@ -5,6 +5,7 @@ import './Button.css';
 type ButtonProps = {
   className: string;
   children: React.ReactNode;
+  disabled?: boolean;
   label?: string;
   type?: 'button' | 'submit';
   href?: string;
@@ -16,6 +17,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
       <button
         className={`button ${props.className}`}
         type={props.type || 'button'}
+        disabled={props.disabled}
         onClick={props.onClick}
       >
           {props.children}
