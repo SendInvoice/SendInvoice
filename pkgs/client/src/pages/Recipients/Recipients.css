@@ -1,3 +1,21 @@
 .h2 {
     margin-left: 1.25rem;
 }
+
+.div-button_form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.button_form:disabled {
+    cursor: not-allowed;
+    background-color: #ece8e8;
+}
+
+.error-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
