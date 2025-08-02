@@ -9,7 +9,7 @@ export default function Dashboard() {
     return (
         <div className="dashboard-layout">
             <Navbar />
-            <div className="content-area">
+            <div className="dashboard-content-area">
                 <Link className='dashboard-link' to='/invoice' style={{ textDecoration: 'none' }}>
                     <FaPlus /><h3>Create New Invoce</h3>
                 </Link>

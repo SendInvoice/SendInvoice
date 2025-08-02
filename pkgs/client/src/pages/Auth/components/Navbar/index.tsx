@@ -14,7 +14,7 @@ export default function Navbar() {
                     <FaHome className='icon'/>
                 </button>
             </Link>
-            <Link style={{textDecoration: 'none' }} to={'/'}>
+            <Link style={{textDecoration: 'none' }} to={'/User'}>
                 <button
                     className="navbar-button"
                 >User

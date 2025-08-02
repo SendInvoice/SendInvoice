@@ -1,3 +1,81 @@
+.invoice-layout {
+  height: 100vh;
+}
+
+.content-area {
+  display: block;
+  justify-content: center;
+  margin: 1rem;
+}
+
 .h2 {
-    margin-left: 1.25rem;
+  margin-left: 1.25rem;
+}
+
+.invoice-button {
+  display: flex;
+  flex-direction: row;
+  margin: 1rem;
+  gap: 1rem;
+}
+
+.dropdown-list {
+  list-style: none;
+  padding: 0;
+  margin: 38px 0;
+  border: 1px solid #ece8e8;
+  border-radius: 0.6rem;
+  width: inherit;
+  background: white;
+  position: absolute;
+  z-index: 10;
+}
+
+.dropdown-item {
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 0.2rem;
+}
+
+.dropdown-item:hover {
+  background-color: #ece8e8;
+}
+
+.modal-form {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  .h3{
+    margin-right: 1rem;
+  }
+}
+
+.modal-form input {
+  font-size: 1rem;
+  border-radius: 0.6rem;
+  background-color: #ece8e8;
+  border: none;
+  outline-color: blueviolet;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.invoice-table {
+  display: flex;
+  justify-content: center;
+}
+
+.invoice-totals {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  border-radius: 0.6rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
 }
