@@ -1,5 +1,5 @@
 {
-  "name": "@SendCV/SendCV",
+  "name": "@SendInvoice/SendInvoice",
   "workspaces": ["pkgs/*"],
   "dependencies": {
     "react-icons": "^5.5.0"

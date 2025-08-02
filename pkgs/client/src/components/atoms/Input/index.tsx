@@ -5,7 +5,7 @@ import './Input.css';
 type InputProps = {
   className?: string;
   label?: string;
-  value: string;
+  value: string | number;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   type?: string;
