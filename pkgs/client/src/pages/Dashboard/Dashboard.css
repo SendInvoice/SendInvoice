@@ -2,13 +2,11 @@
   height: 100vh;
 }
 
-.h1-dashboard {
-  margin-left: 1.25rem;
-}
-
 .dashboard-content-area {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .icon {
@@ -16,24 +14,47 @@
   align-items: center;
   font-size: 1.2rem;
   flex-direction: column-reverse;
-  display:flex;
+  display: flex;
   justify-self: auto;
   justify-content: baseline;
 }
 
 .dashboard-link {
-    border: none;
-    border-radius: 0.6rem;
-    background-color: blueviolet;
-    color: white;
-    cursor: pointer;
-    font-size: 1rem;
-    margin: 1.25rem;
-    padding: 1.25rem;
-    width:50%;
+  border: none;
+  border-radius: 0.6rem;
+  background-color: blueviolet;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  margin: 1.25rem;
+  padding: 1.25rem;
+  width: 50%;
+  text-align: center;
 }
 
 .dashboard-link:hover {
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
-    transform: scale(1.008);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+  transform: scale(1.008);
+}
+
+.dashboard-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.dashboard-subtitle {
+  font-size: 2rem;
+  color: #666;
+  margin-bottom: 2rem;
+  max-width: 600px;
+}
+
+.dashboard-subtitle2 {
+  text-align: center;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 2rem;
+  max-width: 600px;
 }

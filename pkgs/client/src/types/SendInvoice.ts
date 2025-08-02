@@ -1,4 +1,4 @@
-export namespace SendInv oice {
+export namespace SendInvoice {
     export type Invoice = {
         id: string;
         invoiceNumber: string;

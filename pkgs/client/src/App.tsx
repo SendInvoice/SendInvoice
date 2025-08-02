@@ -8,6 +8,7 @@ import './App.css';
 import Recipients from './pages/Recipients';
 import Invoice from './pages/Invoice';
 import User from './pages/User';
+import NewRecipients from './pages/Recipients/New Recipient';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/recipients" element={<Recipients />} />
+          <Route path="/new-recipients" element={<NewRecipients />} />
           <Route path="/invoice" element={<Invoice />} />
           <Route path="/user" element={<User />} />
         </Routes>

@@ -21,7 +21,7 @@ export default function Navbar() {
                     <FaUser className='icon' />
                 </button>
             </Link>
-            <Link style={{textDecoration: 'none' }} to={'/'}>
+            <Link style={{textDecoration: 'none' }} to={'/Recipients'}>
                 <button
                     className="navbar-button"
                 >Recipients
