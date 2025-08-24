@@ -25,7 +25,9 @@ export default ts.config(
 
     languageOptions: {
       parserOptions: {
-        parser: ts.parser
+        parser: ts.parser,
+        project: './tsconfig.json',
+        tsconfigRootDir: __dirname
       }
     }
   }
