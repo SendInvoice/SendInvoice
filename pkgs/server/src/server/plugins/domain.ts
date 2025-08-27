@@ -58,12 +58,14 @@ export const domainServicesPlugin = fp(async (server) => {
     const addressRepository = appDataSource.getRepository(InvoiceEntity.Address);
     const companyRepository = appDataSource.getRepository(InvoiceEntity.Company);
     const recipientRepository = appDataSource.getRepository(InvoiceEntity.Recipient);
+    const invoiceRepository = appDataSource.getRepository(InvoiceEntity.Invoice);
+    const invoiceItemRepository = appDataSource.getRepository(InvoiceEntity.InvoiceItem);
 
     const addressService = new AddressService(addressRepository);
     const companyService = new CompanyService(companyRepository);
     const recipientService = new RecipientService(recipientRepository);
     
-    const invoiceService = new InvoiceService(addressService, companyService, recipientService);
+    const invoiceService = new InvoiceService(invoiceRepository, invoiceItemRepository, addressService, companyService, recipientService);
 
     const domainServices: DomainServices = {
       auth: authService,

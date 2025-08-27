@@ -8,13 +8,11 @@ type Params = {
 
 export const apiV1CompanyRouter: FastifyPluginCallback = (fastify: FastifyInstance, _, done) => {
     
-  // get all user's companies
   fastify.get('/', async (_, reply) => {
     const allCompanies = await fastify.domain.invoice.company.find();
     return reply.status(200).send(allCompanies);
   });
 
-  // create a new company
   fastify.post('/', async (request, reply) => {
     const reqBody = request.body as CreateCompanyDto;
     const result = await fastify.domain.invoice.company.createCompany(reqBody);
@@ -22,7 +20,6 @@ export const apiV1CompanyRouter: FastifyPluginCallback = (fastify: FastifyInstan
     return reply.status(201).send(result);
   });
 
-  // find a company by id
   fastify.get<{ Params: Params }>('/:id', async (request, reply) => {
     const id = request?.params.id as string;
 
@@ -39,7 +36,6 @@ export const apiV1CompanyRouter: FastifyPluginCallback = (fastify: FastifyInstan
     return reply.status(200).send(maybeCompany);
   });
 
-  // update a company by id
   fastify.put<{ Params: Params; Body: Partial<Company> }>('/:id', async (request, reply) => {
     const id = request?.params.id as string;
     const data = request.body;
@@ -57,7 +53,6 @@ export const apiV1CompanyRouter: FastifyPluginCallback = (fastify: FastifyInstan
     return reply.status(200).send(updated);
   });
 
-  //delete  a company
   fastify.delete<{ Params: Params }>('/:id', async (request, reply) => {
     const id = request?.params.id as string;
 

@@ -5,7 +5,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany
+  OneToMany,
+  DeleteDateColumn
 } from 'typeorm';
 
 import { Company } from './Company';
@@ -22,6 +23,7 @@ import type { Relation } from 'typeorm';
 export class Invoice {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
   @Column()
   invoiceNumber: string;
 
@@ -66,4 +68,7 @@ export class Invoice {
 
   @ManyToOne(() => Recipient, (recipient) => recipient.invoices)
   recipientCompany: Relation<Recipient>;
+
+  @DeleteDateColumn({ nullable: true })
+  deletedAt?: Date;
 }

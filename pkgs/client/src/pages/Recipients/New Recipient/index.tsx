@@ -9,6 +9,7 @@ import { Input } from '../../../components/atoms/Input';
 
 import './newRecipients.css'
 import { Modal } from '../../../components/atoms/Modal';
+import { SendInvoiceClient } from '../../../services/SendInvoice';
 
 export default function NewRecipients() {
     const [message, setMessage] = useState<string | null>(null);
@@ -26,44 +27,39 @@ export default function NewRecipients() {
         country: ''
     });
 
-    const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
-        ev.preventDefault();
-        setMessage(null);
-        console.table({
-            name,
-            phone,
-            address,
-        });
-    };
-
-    const handleConfirmSubmit = async () => {
+    const sendRecipient = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/v1/recipients', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name,
-                    phone,
-                    address
-                }),
+            // setLoading(true);
+            setMessage(null);
+            const sendInvoiceClient = new SendInvoiceClient('http://127.0.0.1:8080');
+            const recipient = await sendInvoiceClient.recipient.createRecipient({
+                addressId: '765520af-7c46-46a1-8acc-6d2aa8f7235f',
+                recipientName: name,
+                phone,
             });
 
-            if (res.status === 201) {
-                localStorage.removeItem('recipient_name');
-                localStorage.removeItem('recipient_phone');
-                setShowModal(false);
-                setMessage('Recipient created successfully!');
-            } else if (res.status === 400) {
-                setShowModal(false);
-                setMessage('An unexpected error occurred. Please try again.');
-            }
+            console.log(recipient);
         } catch (err) {
-            setShowModal(false);
-            setMessage('Failed to create Recipient');
+            // setError(err.toString());
+        } finally {
+            // setLoading(false);
         }
     };
+
+    //     if (res.status === 201) {
+    //         localStorage.removeItem('recipient_name');
+    //         localStorage.removeItem('recipient_phone');
+    //         setShowModal(false);
+    //         setMessage('Recipient created successfully!');
+    //     } else if (res.status === 400) {
+    //         setShowModal(false);
+    //         setMessage('An unexpected error occurred. Please try again.');
+    //     }
+    // } catch (err) {
+    //     setShowModal(false);
+    //     setMessage('Failed to create Recipient');
+    // }
+
 
     const canGoToNextStep = name.trim() !== '' && phone.trim() !== '';
     const goToNextStep = () => {
@@ -105,7 +101,7 @@ export default function NewRecipients() {
         <div>
             <Navbar />
             <h2 className='h2'><FaPlus /> Add a new Recipient</h2>
-            <Form onSubmit={handleSubmit}>
+            <Form>
                 {step === 1 && (
                     <>
                         <Input
@@ -209,7 +205,7 @@ export default function NewRecipients() {
                         </Button>
 
                         <Button
-                            onClick={handleConfirmSubmit}
+                            onClick={sendRecipient}
                             className="button_form"
                         >Confirm
                         </Button>
