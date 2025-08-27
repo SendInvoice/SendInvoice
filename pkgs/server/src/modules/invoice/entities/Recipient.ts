@@ -5,7 +5,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany
+  OneToMany,
+  DeleteDateColumn
 } from 'typeorm';
 
 import { Address } from './Address';
@@ -37,4 +38,7 @@ export class Recipient {
 
   @OneToMany(() => Invoice, (invoice) => invoice.recipientCompany)
   invoices: Relation<Invoice[]>;
+
+  @DeleteDateColumn({ nullable: true })
+  deletedAt?: Date;
 }

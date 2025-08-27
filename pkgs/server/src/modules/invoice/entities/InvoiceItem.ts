@@ -4,7 +4,8 @@ import {
   Column,
   ManyToOne,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  DeleteDateColumn
 } from 'typeorm';
 
 import { Invoice } from './Invoice';
@@ -38,4 +39,7 @@ export class InvoiceItem {
 
   @ManyToOne(() => Invoice, (invoice) => invoice.items)
   invoice: Relation<Invoice>;
+
+  @DeleteDateColumn({ nullable: true })
+  deletedAt?: Date;
 }

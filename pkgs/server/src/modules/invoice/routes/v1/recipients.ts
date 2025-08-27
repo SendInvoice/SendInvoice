@@ -8,13 +8,12 @@ type Params = {
 
 export const apiV1RecipientRouter: FastifyPluginCallback = (fastify: FastifyInstance, _, done) => {
     
-  // get all recipients
   fastify.get('/', async (_, reply) => {
     const allRecipients = await fastify.domain.invoice.recipient.find();
     return reply.status(200).send(allRecipients);
   });
 
-  // create a new recipient
+
   fastify.post('/', async (request, reply) => {
     const reqBody = request.body as CreateRecipientDto;
     const result = await fastify.domain.invoice.recipient.createRecipient(reqBody);
@@ -22,7 +21,6 @@ export const apiV1RecipientRouter: FastifyPluginCallback = (fastify: FastifyInst
     return reply.status(201).send(result);
   });
 
-  // find a recipient by id
   fastify.get<{ Params: Params }>('/:id', async (request, reply) => {
     const id = request.params.id;
 
@@ -39,7 +37,6 @@ export const apiV1RecipientRouter: FastifyPluginCallback = (fastify: FastifyInst
     return reply.status(200).send(maybeRecipient);
   });
 
-  // update recipient by id
   fastify.put<{ Params: Params; Body: Partial<Recipient> }>('/:id', async (request, reply) => {
     const id = request.params.id;
     const data = request.body;
@@ -57,7 +54,6 @@ export const apiV1RecipientRouter: FastifyPluginCallback = (fastify: FastifyInst
     return reply.status(200).send(updated);
   });
 
-  // delete recipient by id
   fastify.delete<{ Params: Params }>('/:id', async (request, reply) => {
     const id = request.params.id;
 

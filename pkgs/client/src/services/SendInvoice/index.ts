@@ -1,9 +1,12 @@
-import { InvoiceService } from "./Invoice";
+import { InvoiceClient } from "./Invoice";
+import { RecipientClient } from "./Invoice/RecipientClient";
 
-export class SendInvoiceService {
-    public readonly invoice: InvoiceService;
+export class SendInvoiceClient {
+    public readonly invoice: InvoiceClient;
+    public readonly recipient: RecipientClient;
 
     constructor(baseUrl: URL) {
-        this.invoice = new InvoiceService(baseUrl);
+        this.invoice = new InvoiceClient(baseUrl);
+        this.recipient = new RecipientClient(baseUrl);
     }
 }
