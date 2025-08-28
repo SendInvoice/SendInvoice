@@ -23,11 +23,21 @@ export class RecipientService {
   }
 
   public async createRecipient(dto: CreateRecipientDto): Promise<Entity.Recipient> {
+
+    if (!dto.recipientName?.trim()) {
+      throw new Error('Recipient name is required');
+    }
+    if (!dto.phone?.trim()) {
+      throw new Error('Phone is required');
+    }
+    if (!dto.addressId?.trim()) {
+      throw new Error('Address ID is required');
+    }
+    
     const recipient = new Recipient();
 
     recipient.recipientName = dto.recipientName;
     recipient.phone = dto.phone;
-    
     recipient.address = { id: dto.addressId } as any;
 
     const result = await this.recipientRepository.save(recipient);
@@ -51,7 +61,7 @@ export class RecipientService {
   }
 
   public async deleteById(id: string): Promise<boolean> {
-    const result = await this.recipientRepository.delete({ id });
+    const result = await this.recipientRepository.softDelete({ id });
     return result.affected !== 0;
   }
 }

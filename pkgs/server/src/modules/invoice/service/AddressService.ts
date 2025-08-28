@@ -4,8 +4,8 @@ import { Entity } from '../';
 import { Address } from '../entities';
 
 export type CreateAddressDto = {
-  StreetAddress1: string;
-  StreetAddress2: string;
+  streetAddress1: string;
+  streetAddress2: string;
   city: string;
   cityArea: string;
   postalCode: string;
@@ -27,8 +27,8 @@ export class AddressService {
   public async createAddress(dto: CreateAddressDto): Promise<Entity.Address> {
     const address = new Address();
 
-    address.StreetAddress1 = dto.StreetAddress1;
-    address.StreetAddress2 = dto.StreetAddress2;
+    address.streetAddress1 = dto.streetAddress1;
+    address.streetAddress2 = dto.streetAddress2;
     address.city = dto.city;
     address.cityArea = dto.cityArea;
     address.postalCode = dto.postalCode;
@@ -39,8 +39,8 @@ export class AddressService {
     return result;
   }
 
-  public async findById(id: string): Promise<Address[] | null> {
-    const address = await this.addressRepository.findBy({
+  public async findById(id: string): Promise<Address | null> {
+    const address = await this.addressRepository.findOneBy({
       id
     });
 
@@ -58,7 +58,7 @@ export class AddressService {
   }
 
   public async deleteById(id: string): Promise<boolean> {
-    const result = await this.addressRepository.delete({ id });
+    const result = await this.addressRepository.softDelete({ id });
     return result.affected !== 0;
   }
 }

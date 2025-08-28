@@ -32,8 +32,9 @@ export default function NewRecipients() {
             // setLoading(true);
             setMessage(null);
             const sendInvoiceClient = new SendInvoiceClient('http://127.0.0.1:8080');
+            const newAddress = await sendInvoiceClient.address.createAddress(address);
             const recipient = await sendInvoiceClient.recipient.createRecipient({
-                addressId: '765520af-7c46-46a1-8acc-6d2aa8f7235f',
+                addressId: newAddress.id,
                 recipientName: name,
                 phone,
             });

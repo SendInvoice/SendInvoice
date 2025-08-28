@@ -22,10 +22,10 @@ export class Address {
   id: string;
 
   @Column()
-  StreetAddress1: string;
+  streetAddress1: string;
 
   @Column()
-  StreetAddress2: string;
+  streetAddress2: string;
 
   @Column()
   city: string;

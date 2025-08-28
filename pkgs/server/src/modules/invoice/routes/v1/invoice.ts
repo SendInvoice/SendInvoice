@@ -1,6 +1,7 @@
 import type { FastifyInstance, FastifyPluginCallback } from 'fastify';
 import type { CreateInvoiceDto, CreateInvoiceItemDto, UpdateInvoiceItemDto } from '../../service';
 import type { Invoice } from '../../entities/Invoice';
+import { validateCompanyId, validateItemId, validateUserId, validateUUID } from '../../../../utils/uuid';
 
 type Params = {
     id: string;
@@ -22,15 +23,9 @@ export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstan
         return reply.status(200).send(invoices);
     });
 
-    fastify.get<{ Params: Params }>('/:id', async (request, reply) => {
+    fastify.get<{ Params: Params }>('/:id', {preHandler: validateUUID()}, async (request, reply) => {
         try {
             const { id } = request.params;
-
-            if (!id || !/^[0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[1-5][0-9a-fA-F-]{3}-[89abAB][0-9a-fA-F-]{3}-[0-9a-fA-F-]{12}$/.test(id)) {
-                request.log.warn(`Invalid invoice id received: ${id}`);
-                return reply.status(400).send({ message: 'Invalid or missing invoice ID' });
-            }
-
             const invoice = await fastify.domain.invoice.findById(id);
 
             if (!invoice) {
@@ -45,15 +40,9 @@ export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstan
         }
     });
 
-    fastify.get<{ Params: { userId: string } }>('/:userId', async (request, reply) => {
+    fastify.get<{ Params: { userId: string } }>('/:userId', {preHandler: validateUserId()}, async (request, reply) => {
         try {
             const { userId } = request.params;
-
-            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-            if (!uuidRegex.test(userId)) {
-                return reply.status(400).send({ message: 'Invalid user ID format' });
-            }
-
             const userInvoices = await fastify.domain.invoice.findByUserId(userId);
 
             return reply.status(200).send({
@@ -70,15 +59,9 @@ export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstan
         }
     });
 
-    fastify.get<{ Params: { companyId: string } }>('/:companyId', async (request, reply) => {
+    fastify.get<{ Params: { companyId: string } }>('/:companyId', {preHandler: validateCompanyId()}, async (request, reply) => {
         try {
             const { companyId } = request.params;
-
-            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-            if (!uuidRegex.test(companyId)) {
-                return reply.status(400).send({ message: 'Invalid company ID format' });
-            }
-
             const companyInvoices = await fastify.domain.invoice.findByCompanyId(companyId);
 
             return reply.status(200).send({
@@ -127,44 +110,44 @@ export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstan
         }
     });
 
-    fastify.put<{ Params: Params; Body: Partial<Invoice> }>('/:id', async (request, reply) => {
+    fastify.put<{ Params: Params; Body: Partial<Invoice> }>('/:id', {preHandler: validateUUID()}, async (request, reply) => {
         const { id } = request.params;
         const data = request.body;
 
-        if (!id) return reply.status(400).send({ message: 'Id is required' });
         if ('items' in data) {
             return reply.status(400).send({ message: 'Updating items from this endpoint is not supported' });
         }
+        try {
+            const updated = await fastify.domain.invoice.updateById(id, data);
+            if (!updated) return reply.status(404).send({ message: 'Invoice not found or not updated' });
 
-        const updated = await fastify.domain.invoice.updateById(id, data);
-        if (!updated) {
-            return reply.status(404).send({ message: 'Invoice not found or not updated' });
+            return reply.status(200).send(updated);
+
+        } catch (error) {
+            request.log.error({ error }, 'Error updating invoice');
+
+            return reply.status(500).send({ message: 'Internal server error' });
         }
-        return reply.status(200).send(updated);
     });
 
-
-    fastify.delete<{ Params: Params }>('/:id', async (request, reply) => {
+    fastify.delete<{ Params: Params }>('/:id', {preHandler: validateUUID()}, async (request, reply) => {
         const { id } = request.params;
-        if (!id) return reply.status(400).send({ message: 'Id is required' });
+        try {
+            const deleted = await fastify.domain.invoice.deleteById(id);
+            if (!deleted) return reply.status(404).send({ message: 'Invoice not found' });
 
-        const deleted = await fastify.domain.invoice.deleteById(id);
-        if (!deleted) return reply.status(404).send({ message: 'Invoice not found' });
-
-        return reply.status(200).send({ message: 'Invoice deleted successfully' });
+            return reply.status(200).send({ message: 'Invoice deleted successfully' });
+        } catch (error) {
+            request.log.error({ error }, 'Error deleting invoice');
+            return reply.status(500).send({ message: 'Internal server error' });
+        }
     });
 
     //Routes for items
-    
-    fastify.get<{ Params: InvoiceParams }>('/:id/item', async (request, reply) => {
+
+    fastify.get<{ Params: InvoiceParams }>('/:id/item', {preHandler: validateUUID()}, async (request, reply) => {
         try {
             const { id } = request.params;
-
-            if (!id || !/^[0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[1-5][0-9a-fA-F-]{3}-[89abAB][0-9a-fA-F-]{3}-[0-9a-fA-F-]{12}$/.test(id)) {
-                request.log.warn(`Invalid invoice id received: ${id}`);
-                return reply.status(400).send({ message: 'Invalid or missing invoice ID' });
-            }
-
             const items = await fastify.domain.invoice.findInvoiceItems(id);
 
             return reply.status(200).send({
@@ -182,20 +165,9 @@ export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstan
         }
     });
 
-    fastify.get<{ Params: ItemParams }>('/:id/item/:itemId', async (request, reply) => {
+    fastify.get<{ Params: ItemParams }>('/:id/item/:itemId',{preHandler: [validateUUID(), validateItemId()]}, async (request, reply) => {
         try {
             const { id, itemId } = request.params;
-
-            const uuidRegex = /^[0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[1-5][0-9a-fA-F-]{3}-[89abAB][0-9a-fA-F-]{3}-[0-9a-fA-F-]{12}$/;
-
-            if (!uuidRegex.test(id)) {
-                return reply.status(400).send({ message: 'Invalid invoice ID format' });
-            }
-
-            if (!uuidRegex.test(itemId)) {
-                return reply.status(400).send({ message: 'Invalid item ID format' });
-            }
-
             const item = await fastify.domain.invoice.findInvoiceItemById(id, itemId);
 
             if (!item) {
@@ -209,14 +181,10 @@ export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstan
         }
     });
 
-    fastify.post<{ Params: InvoiceParams; Body: CreateInvoiceItemDto }>('/:id/item', async (request, reply) => {
+    fastify.post<{ Params: InvoiceParams; Body: CreateInvoiceItemDto }>('/:id/item', {preHandler: validateUUID()}, async (request, reply) => {
         try {
             const { id } = request.params;
             const body = request.body;
-
-            if (!id || !/^[0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[1-5][0-9a-fA-F-]{3}-[89abAB][0-9a-fA-F-]{3}-[0-9a-fA-F-]{12}$/.test(id)) {
-                return reply.status(400).send({ message: 'Invalid or missing invoice ID' });
-            }
 
             if (!body.description?.trim()) {
                 return reply.status(400).send({ message: 'Description is required and cannot be empty' });
@@ -236,7 +204,6 @@ export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstan
             };
 
             const createdItem = await fastify.domain.invoice.createInvoiceItem(id, itemData);
-
             return reply.status(201).send(createdItem);
         } catch (err: any) {
             if (err.message === 'Invoice not found') {
@@ -248,20 +215,10 @@ export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstan
         }
     });
 
-    fastify.put<{ Params: ItemParams; Body: UpdateInvoiceItemDto }>('/:id/item/:itemId', async (request, reply) => {
+    fastify.put<{ Params: ItemParams; Body: UpdateInvoiceItemDto }>('/:id/item/:itemId', {preHandler: [validateUUID(), validateItemId()]}, async (request, reply) => {
         try {
             const { id, itemId } = request.params;
             const data = request.body;
-
-            const uuidRegex = /^[0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[1-5][0-9a-fA-F-]{3}-[89abAB][0-9a-fA-F-]{3}-[0-9a-fA-F-]{12}$/;
-
-            if (!uuidRegex.test(id)) {
-                return reply.status(400).send({ message: 'Invalid invoice ID format' });
-            }
-
-            if (!uuidRegex.test(itemId)) {
-                return reply.status(400).send({ message: 'Invalid item ID format' });
-            }
 
             if (data.quantity !== undefined && data.quantity <= 0) {
                 return reply.status(400).send({ message: 'Quantity must be greater than 0' });
@@ -288,21 +245,9 @@ export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstan
         }
     });
 
-    fastify.delete<{ Params: ItemParams }>('/:id/item/:itemId', async (request, reply) => {
+    fastify.delete<{ Params: ItemParams }>('/:id/item/:itemId', {preHandler: [validateUUID(), validateItemId()]}, async (request, reply) => {
         try {
             const { id, itemId } = request.params;
-
-            
-            const uuidRegex = /^[0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[1-5][0-9a-fA-F-]{3}-[89abAB][0-9a-fA-F-]{3}-[0-9a-fA-F-]{12}$/;
-
-            if (!uuidRegex.test(id)) {
-                return reply.status(400).send({ message: 'Invalid invoice ID format' });
-            }
-
-            if (!uuidRegex.test(itemId)) {
-                return reply.status(400).send({ message: 'Invalid item ID format' });
-            }
-
             const deleted = await fastify.domain.invoice.deleteInvoiceItemById(id, itemId);
 
             if (!deleted) {
