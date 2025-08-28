@@ -26,6 +26,15 @@ export class CompanyService {
     return companies;
   }
 
+  public async findById(id: string): Promise<Company | null> {
+    const company = await this.companyRepository.findOne({
+      where: { id },
+      relations: ['user', 'address', 'invoices']
+    });
+
+    return company || null;
+  }
+
   public async createCompany(dto: CreateCompanyDto): Promise<Entity.Company> {
     const company = new Company();
 
@@ -42,15 +51,6 @@ export class CompanyService {
     return result;
   }
 
-  public async findById(id: string): Promise<Company | null> {
-    const company = await this.companyRepository.findOne({
-      where: { id },
-      relations: ['user', 'address', 'invoices']
-    });
-
-    return company || null;
-  }
-
   public async updateById(id: string, data: Partial<Company>): Promise<Company | null> {
     await this.companyRepository.update({ id }, data);
     const updated = await this.companyRepository.findOneBy({ id });
@@ -58,7 +58,7 @@ export class CompanyService {
   }
 
   public async deleteById(id: string): Promise<boolean> {
-    const result = await this.companyRepository.delete({ id });
+    const result = await this.companyRepository.softDelete({ id });
     return result.affected !== 0;
   }
 }
