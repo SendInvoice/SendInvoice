@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Input } from '../../../../components/atoms/Input';
 import { Button } from '../../../../components/atoms/Button';
@@ -11,6 +12,8 @@ export default function LogIn() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [email, setEmail] = useState("");
 
+  const navigate = useNavigate();
+  
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
     setErrorMessage(null);
@@ -35,40 +38,40 @@ export default function LogIn() {
       localStorage.setItem('authToken', resBody.token);
 
       setDone(true);
+      navigate('/dashboard');
     } else {
       setErrorMessage('Error during login');
     }
   };
 
   return (
-    <div className='log-in_container'>
-
+    <div>
       {
         isDone ? (
           <div>We have sent an email for you to enter!</div>
         ) : (
-          <div>
-            <h2> Log In </h2>
-            <Form onSubmit={handleSubmit}>
-              <Input
-                className='input-field'
-                type='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder='Email Address'
-              />
+            <div>
+              <h2 className='page-title'> Log In </h2>
+              <Form onSubmit={handleSubmit}>
+                <Input
+                  className='input-field'
+                  type='email'
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder='Email Address'
+                />
 
-              {errorMessage && (
-                <p className="error-message">{errorMessage}</p>
-              )}
+                {errorMessage && (
+                  <p className="error-message">{errorMessage}</p>
+                )}
 
-              <Button
-                className='button_form'
-                type='submit'>
-                Enter
-              </Button>
-            </Form>
-          </div>
+                <Button
+                  className='button_form'
+                  type='submit'>
+                  Enter
+                </Button>
+              </Form>
+            </div>
         )
       }
     </div>
