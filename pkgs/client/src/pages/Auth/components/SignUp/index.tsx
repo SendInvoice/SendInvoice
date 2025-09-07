@@ -67,13 +67,13 @@ export default function SignUp() {
   };
 
   return (
-    <div className='sign-up_container'>
+    <div>
       {
         isDone ? (
           <div>Account created successfully.</div>
         ) : (
           <div>
-            <h2> Create an Account </h2>
+            <h2 className='page-title'> Create an Account </h2>
             <Form onSubmit={handleSubmit}>
               <Input
                 type='text'

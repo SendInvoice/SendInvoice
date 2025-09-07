@@ -47,6 +47,7 @@ BillToAddressId UUID FK >- Address.Id
 ShipToAddressId UUID FK >- Address.Id
 UserId UUID FK - User.Id
 
+
 Recipient
 -
 Id PK UUID

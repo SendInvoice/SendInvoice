@@ -1,3 +1,5 @@
+import { AddressClient } from "./AddressClient";
+import { CompanyClient } from "./CompanyClient";
 import { RecipientClient } from "./RecipientClient";
 
 export type Invoice = {
@@ -55,12 +57,16 @@ export type InvoiceItem = {
 export type UpdateInvoiceItemPayload = Partial<CreateInvoiceItemPayload>;
 
 export class InvoiceClient {
+    readonly address: AddressClient;
+    readonly company: CompanyClient;
     readonly recipient: RecipientClient;
 
     private baseUrl: URL;
 
     constructor(baseUrl: URL) {
         this.baseUrl = baseUrl;
+        this.address = new AddressClient(baseUrl);
+        this.company = new CompanyClient(baseUrl);
         this.recipient = new RecipientClient(baseUrl);
     }
 

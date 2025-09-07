@@ -3,10 +3,6 @@
   "workspaces": {
     "": {
       "name": "@SendCV/SendCV",
-      "dependencies": {
-        "react-icons": "^5.5.0",
-        "uuid": "^11.1.0",
-      },
     },
     "pkgs/client": {
       "name": "client",
