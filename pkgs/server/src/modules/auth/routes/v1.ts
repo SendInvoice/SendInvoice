@@ -1,9 +1,9 @@
 import type { FastifyInstance, FastifyPluginCallback } from 'fastify';
 
 export const apiV1AuthRouter: FastifyPluginCallback = (fastify: FastifyInstance, _, done) => {
-  fastify.get('/', async (_, reply) => {
-    const result = await fastify.domain.user.getUser();
-    return reply.status(200).send(result);
+  fastify.get('/whoami', async (request, reply) => {
+    const currentUser = request.user;
+    return reply.status(200).send(currentUser);
   });
 
   fastify.post('/sign-up', async (request, reply) => {

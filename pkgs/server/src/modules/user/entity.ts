@@ -11,10 +11,19 @@ import { Invoice } from '../invoice/entities/Invoice';
 import { Company } from '../invoice/entities/Company';
 import { Token } from '../auth/entity';
 
+export interface IUser {
+  id: string;
+  name: string;
+  surname: string;
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 @Entity({
   name: 'user'
 })
-export class User {
+export class User implements IUser {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -24,7 +33,7 @@ export class User {
   @Column({ nullable: false })
   surname: string;
 
-  @Column({ unique:true, nullable: false})
+  @Column({ unique: true, nullable: false })
   email: string;
 
   @CreateDateColumn()

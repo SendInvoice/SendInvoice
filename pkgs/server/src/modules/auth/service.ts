@@ -34,7 +34,7 @@ export class AuthService {
     return await this.tokenRepository.save(token);
   }
 
-  async findByToken(tokenStr: string): Promise<Token[] | null> {
+  async findByToken(tokenStr: string): Promise<Token | null> {
     const token = await this.tokenRepository.find({
       where: {
         token: tokenStr
@@ -42,10 +42,6 @@ export class AuthService {
       relations: ['user']
     });
 
-    if (!token) {
-      return null;
-    } else {
-      return token;
-    }
+    return token[0] || null;
   }
 }
