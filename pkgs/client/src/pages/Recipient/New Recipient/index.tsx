@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 
-import Navbar from '../../Auth/components/Navbar'
 
 import { FaPlus } from 'react-icons/fa'
 import { Button } from '../../../components/atoms/Button';
@@ -10,6 +9,7 @@ import { Input } from '../../../components/atoms/Input';
 import './newRecipients.css'
 import { Modal } from '../../../components/atoms/Modal';
 import { SendInvoiceClient } from '../../../services/SendInvoice';
+import Navbar from '../../../components/molecules/Navbar';
 
 export default function NewRecipients() {
     const [message, setMessage] = useState<string | null>(null);
@@ -31,7 +31,7 @@ export default function NewRecipients() {
         try {
             // setLoading(true);
             setMessage(null);
-            const sendInvoiceClient = new SendInvoiceClient('http://127.0.0.1:8080');
+            const sendInvoiceClient = new SendInvoiceClient('http://127.0.0.1:8080' as any);
             const newAddress = await sendInvoiceClient.address.createAddress(address);
             const recipient = await sendInvoiceClient.recipient.createRecipient({
                 addressId: newAddress.id,
@@ -46,21 +46,6 @@ export default function NewRecipients() {
             // setLoading(false);
         }
     };
-
-    //     if (res.status === 201) {
-    //         localStorage.removeItem('recipient_name');
-    //         localStorage.removeItem('recipient_phone');
-    //         setShowModal(false);
-    //         setMessage('Recipient created successfully!');
-    //     } else if (res.status === 400) {
-    //         setShowModal(false);
-    //         setMessage('An unexpected error occurred. Please try again.');
-    //     }
-    // } catch (err) {
-    //     setShowModal(false);
-    //     setMessage('Failed to create Recipient');
-    // }
-
 
     const canGoToNextStep = name.trim() !== '' && phone.trim() !== '';
     const goToNextStep = () => {

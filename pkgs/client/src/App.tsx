@@ -7,8 +7,9 @@ import Dashboard from './pages/Dashboard';
 import './App.css';
 import Invoice from './pages/Invoice';
 import User from './pages/User';
-import NewRecipients from './pages/Recipients/New Recipient';
-import UpdateRecipients from './pages/Recipients/Update Recipient';
+import NewRecipients from './pages/Recipient/New Recipient';
+import UpdateRecipients from './pages/Recipient/Update Recipient';
+import Recipient from './pages/Recipient';
 
 function App() {
   return (
@@ -17,8 +18,9 @@ function App() {
         <Routes>
           <Route path="/dashboard" element={ <Dashboard /> } />
           <Route path="/auth" element={ <Auth /> } />
+          <Route path="/recipient" element={ <Recipient recipients={[]}/> } />
           <Route path="/update-recipient" element={ <UpdateRecipients /> } />
-          <Route path="/new-recipients" element={ <NewRecipients /> } />
+          <Route path="/new-recipient" element={ <NewRecipients /> } />
           <Route path="/invoice" element={ <Invoice /> } />
           <Route path="/user" element={ <User /> } />
         </Routes>

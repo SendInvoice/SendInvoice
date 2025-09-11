@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 
-import Navbar from '../Auth/components/Navbar';
 import EmptyState from './components/EmptyState';
 import UserDashboard from './components/UserDashboard';
 import { SendInvoiceClient } from '../../services/SendInvoice';
 
 import './Dashboard.css';
 import type { Invoice } from '../../services/SendInvoice/Invoice';
+import Navbar from '../../components/molecules/Navbar';
 
 export default function Dashboard() {
     const [hasInvoices, setHasInvoices] = useState(false);     

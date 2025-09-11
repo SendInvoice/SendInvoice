@@ -1,4 +1,4 @@
-import Navbar from '../../Auth/components/Navbar'
+import Navbar from '../../../components/molecules/Navbar';
 import { FaEdit } from 'react-icons/fa'
 
 import './updateRecipients.css'

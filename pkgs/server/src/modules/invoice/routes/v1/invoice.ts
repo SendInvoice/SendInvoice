@@ -23,33 +23,11 @@ type InvoiceParams = {
 };
 
 export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstance, _, done) => {
+
   fastify.get('/', async (_, reply) => {
     const invoices = await fastify.domain.invoice.find();
     return reply.status(200).send(invoices);
   });
-
-  // fastify.get<{ Params: { userId: string } }>(
-  //   '/:userId',
-  //   { preHandler: validateUserId() },
-  //   async (request, reply) => {
-  //     try {
-  //       const { userId } = request.params;
-  //       const userInvoices = await fastify.domain.invoice.findByUserId(userId);
-
-  //       return reply.status(200).send({
-  //         userId,
-  //         totalInvoices: userInvoices.length,
-  //         invoices: userInvoices
-  //       });
-  //     } catch (error: any) {
-  //       request.log.error({ error }, 'Error fetching user invoices');
-  //       return reply.status(500).send({
-  //         message: 'Error fetching user invoices',
-  //         error: error.message
-  //       });
-  //     }
-  //   }
-  // );
 
   fastify.get<{ Params: Params }>(
     '/:id',

@@ -1,7 +1,8 @@
-import Navbar from '../Auth/components/Navbar'
+
 import './User.css'
 
 import conchoImage from '../../assets/concho.png';
+import Navbar from '../../components/molecules/Navbar';
 
 export default function User() {
     

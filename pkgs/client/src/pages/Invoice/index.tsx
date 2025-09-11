@@ -1,12 +1,13 @@
 import { FaChevronDown, FaPlus } from 'react-icons/fa'
-import Navbar from '../Auth/components/Navbar'
+
 import { Button } from '../../components/atoms/Button'
 
 import './Invoice.css'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Table } from '../../components/atoms/Table'
 import { Modal } from '../../components/atoms/Modal'
 import { Input } from '../../components/atoms/Input'
+import Navbar from '../../components/molecules/Navbar'
 
 type Recipient = {
     id: string;
@@ -27,34 +28,9 @@ export default function Invoice() {
     // const [selectedRecipient, setSelectedRecipient] = useState<Recipient | null>(null);
     // const [showDropdown, setShowDropdown] = useState(false);
 
-    const mockRecipients = [
-        {
-            id: '1',
-            recipientName: 'Juan Pérez',
-            phone: '123456789',
-            address: {
-                StreetAddress1: 'Av. Siempre Viva 123',
-                StreetAddress2: 'Piso 2',
-                city: 'Springfield',
-                cityArea: 'Centro',
-                postalCode: '12345',
-                country: 'USA'
-            }
-        },
-        {
-            id: '2',
-            recipientName: 'Ana Gómez',
-            phone: '987654321',
-            address: {
-                StreetAddress1: 'Calle Falsa 456',
-                StreetAddress2: '',
-                city: 'Shelbyville',
-                cityArea: 'Norte',
-                postalCode: '54321',
-                country: 'USA'
-            }
-        }
-    ];
+    // falta pedirle al back la lista de los recipients 
+    // falta setear los datos del usuario que crea el invoice (address, firma, logo)
+    
 
     const [recipients, setRecipients] = useState(mockRecipients);
     const [selectedRecipient, setSelectedRecipient] = useState<Recipient | null>(null);
@@ -76,7 +52,6 @@ export default function Invoice() {
         item: '',
         price: 0
     });
-
 
     const [showTaxSelector, setShowTaxSelector] = useState(false);
     const [selectedTaxRate, setSelectedTaxRate] = useState(0);
