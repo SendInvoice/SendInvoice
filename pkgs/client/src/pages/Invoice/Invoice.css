@@ -78,3 +78,9 @@
   margin-bottom: 1rem;
   padding: 1rem;
 }
+
+.note-button, .note-textarea{
+  margin-bottom: 1rem;
+  width: 100%;
+}
+

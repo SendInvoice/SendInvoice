@@ -27,6 +27,9 @@ export class Recipient {
   @Column()
   phone: string;
 
+  @Column()
+  email: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -36,7 +39,7 @@ export class Recipient {
   @ManyToOne(() => Address, (address) => address.recipients)
   address: Relation<Address>;
 
-  @OneToMany(() => Invoice, (invoice) => invoice.recipientCompany)
+  @OneToMany(() => Invoice, (invoice) => invoice.recipient)
   invoices: Relation<Invoice[]>;
 
   @DeleteDateColumn({ nullable: true })

@@ -21,6 +21,9 @@ export default function NewRecipients() {
   const [phone, setPhone] = useState(
     () => localStorage.getItem("recipient_phone") || "",
   );
+  const [email, setEmail] = useState(
+    () => localStorage.getItem("recipient_email") || "",
+  );
   const [address, setAddress] = useState({
     streetAddress1: "",
     streetAddress2: "",
@@ -30,18 +33,17 @@ export default function NewRecipients() {
     country: "",
   });
 
-  const sendRecipient = async () => {
+  const createRecipient = async () => {
     try {
       // setLoading(true);
       setMessage(null);
-      const sendInvoiceClient = new SendInvoiceClient(
-        "http://127.0.0.1:8080" as any,
-      );
+      const sendInvoiceClient = new SendInvoiceClient(new URL("http://127.0.0.1:8080"));
       const newAddress = await sendInvoiceClient.address.createAddress(address);
       const recipient = await sendInvoiceClient.recipient.createRecipient({
         addressId: newAddress.id,
         recipientName: name,
         phone,
+        email,
       });
 
       setShowModal(false);
@@ -53,10 +55,10 @@ export default function NewRecipients() {
     }
   };
 
-  const canGoToNextStep = name.trim() !== "" && phone.trim() !== "";
+  const canGoToNextStep = name.trim() !== "" && phone.trim() !== "" && email.trim() !== "";
   const goToNextStep = () => {
     if (!canGoToNextStep) {
-      setMessage("Please fill in Name and Phone first");
+      setMessage("Please fill in Name, Phone and Email first");
       return;
     }
     setMessage(null);
@@ -87,6 +89,10 @@ export default function NewRecipients() {
     localStorage.setItem("recipient_phone", phone);
   }, [phone]);
 
+    useEffect(() => {
+    localStorage.setItem("recipient_email", email);
+  }, [email]);
+
   return (
     <div>
       <Navbar />
@@ -107,6 +113,12 @@ export default function NewRecipients() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="Phone"
+            />
+            <Input
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
             />
             {message && <p className="error-message">{message}</p>}
             <Button
@@ -197,6 +209,9 @@ export default function NewRecipients() {
             <strong>Phone:</strong> {phone}
           </p>
           <p>
+            <strong>Email:</strong> {email}
+          </p>
+          <p>
             <strong>Street Address 1:</strong> {address.streetAddress1}
           </p>
           <p>
@@ -220,7 +235,7 @@ export default function NewRecipients() {
               Cancel
             </Button>
 
-            <Button onClick={sendRecipient} className="button_form">
+            <Button onClick={createRecipient} className="button_form">
               Confirm
             </Button>
           </div>

@@ -7,8 +7,11 @@
 }
 
 .recipient-content-area {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .icon {
@@ -36,4 +39,50 @@
 .recipient-link:hover {
     box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
     transform: scale(1.008);
+}
+
+.update-button {
+    background-color: #3dc8f7;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.update-button:hover {
+    background-color: #42d0f8;
+}
+
+.delete-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: #da190b;
+}
+.loading-container,
+.error-container,
+.empty-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.error-container p {
+    color: #f44336;
 }

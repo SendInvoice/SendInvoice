@@ -1,8 +1,11 @@
+import type { Address } from "./AddressClient";
+
 export type Recipient = {
     id: string;
     recipientName: string;
     phone: string;
-    addressId: string;
+    email: string;
+    address: Address;
     createdAt: Date;
     updatedAt: Date;
 };
@@ -10,12 +13,14 @@ export type Recipient = {
 export type CreateRecipientPayload = {
     recipientName: string;
     phone: string;
+    email: string;
     addressId: string;
 };
 
 export type UpdateRecipientPayload = Partial<{
     recipientName: string;
     phone: string;
+    email: string;
     addressId: string;
 }>;
 export class RecipientClient {
@@ -79,6 +84,11 @@ export class RecipientClient {
         if (!payload.phone?.trim()) {
             throw new Error('Phone is required');
         }
+
+         if (!payload.email?.trim()) {
+            throw new Error('Email ID is required');
+        }
+
         if (!payload.addressId?.trim()) {
             throw new Error('Address ID is required');
         }
@@ -144,9 +154,6 @@ export class RecipientClient {
 
         const response = await fetch(url, {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
         });
 
         if (response.ok) {

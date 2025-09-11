@@ -15,12 +15,11 @@ export type Invoice = {
     shipToAddressId: string;
     userId: string;
     companyId: string;
-    recipientCompanyId: string;
+    recipientId: string;
     items: CreateInvoiceItemPayload[];
 };
 
 export type CreateInvoicePayload = {
-    id: string;
     invoiceNumber: string;
     subtotal: number;
     tax: number;
@@ -32,7 +31,7 @@ export type CreateInvoicePayload = {
     shipToAddressId: string;
     userId: string;
     companyId: string;
-    recipientCompanyId: string;
+    recipientId: string;
     items: CreateInvoiceItemPayload[];
 };
 
@@ -178,9 +177,6 @@ export class InvoiceClient {
 
         const response = await fetch(url, {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
         });
 
         if (response.ok) {

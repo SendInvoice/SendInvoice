@@ -67,7 +67,7 @@ export class Invoice {
   company: Relation<Company>;
 
   @ManyToOne(() => Recipient, (recipient) => recipient.invoices)
-  recipientCompany: Relation<Recipient>;
+  recipient: Relation<Recipient>;
 
   @DeleteDateColumn({ nullable: true })
   deletedAt?: Date;

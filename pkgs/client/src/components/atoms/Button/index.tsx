@@ -3,7 +3,7 @@ import React from 'react';
 import './Button.css';
 
 type ButtonProps = {
-  className: string;
+  className?: string;
   children: React.ReactNode;
   disabled?: boolean;
   label?: string;

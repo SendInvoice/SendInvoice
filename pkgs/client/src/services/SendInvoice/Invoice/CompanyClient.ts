@@ -177,9 +177,6 @@ export class CompanyClient {
 
         const response = await fetch(url, {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
         });
 
         if (response.ok) {
