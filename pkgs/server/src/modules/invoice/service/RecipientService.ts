@@ -6,6 +6,7 @@ import { Recipient } from '../entities';
 export type CreateRecipientDto = {
   recipientName: string;
   phone: string;
+  email: string;
   addressId: string;
 };
 
@@ -30,14 +31,20 @@ export class RecipientService {
     if (!dto.phone?.trim()) {
       throw new Error('Phone is required');
     }
+
+    if (!dto.email?.trim()) {
+      throw new Error('Email is required');
+    }
+
     if (!dto.addressId?.trim()) {
       throw new Error('Address ID is required');
     }
-    
+
     const recipient = new Recipient();
 
     recipient.recipientName = dto.recipientName;
     recipient.phone = dto.phone;
+    recipient.email = dto.email;
     recipient.address = { id: dto.addressId } as any;
 
     const result = await this.recipientRepository.save(recipient);

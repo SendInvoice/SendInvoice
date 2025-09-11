@@ -15,10 +15,9 @@ export default function Dashboard() {
     useEffect(() => {
         const checkUserInvoices = async () => {
             try {
-                const sendInvoiceClient = new SendInvoiceClient('http://127.0.0.1:8080' as any);
+                const sendInvoiceClient = new SendInvoiceClient(new URL('http://127.0.0.1:8080'));
                 const invoiceList = await sendInvoiceClient.invoice.getInvoices();
-                debugger;
-                
+
                 if (!invoiceList || invoiceList.length === 0) {
                     setHasInvoices(false);
                     setInvoices([]);

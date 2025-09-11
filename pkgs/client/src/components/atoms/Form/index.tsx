@@ -3,7 +3,7 @@ import React from 'react';
 import './Form.css';
 
 type FormProps = {
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
   className?: string;
   children: React.ReactNode;
 };

@@ -1,12 +1,13 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import './Recipient.css';
-import { FaEdit, FaPlus } from 'react-icons/fa';
+import { FaEdit, FaEraser, FaPlus } from 'react-icons/fa';
 import Navbar from '../../components/molecules/Navbar';
 import type { Recipient } from '../../services/SendInvoice/Invoice/RecipientClient';
 import { useEffect, useState } from 'react';
 import { SendInvoiceClient } from '../../services/SendInvoice';
 import { Table } from '../../components/atoms/Table';
+import { Button } from '../../components/atoms/Button';
 
 type RecipientProps = {
     recipients: Recipient[];
@@ -17,15 +18,15 @@ export default function Recipient({ recipients: inicialRecipients }: RecipientPr
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>('');
 
+    const navigate = useNavigate();
+
     const loadRecipients = async () => {
         try {
             setLoading(true);
             setError('');
 
-            const sendInvoiceClient = new SendInvoiceClient('http://127.0.0.1:8080' as any);
+            const sendInvoiceClient = new SendInvoiceClient(new URL("http://127.0.0.1:8080"));
             const recipientsList = await sendInvoiceClient.recipient.getRecipients();
-
-            console.log('Loaded Recipients:', recipientsList);
             setRecipients(recipientsList);
 
         } catch (error) {
@@ -42,8 +43,33 @@ export default function Recipient({ recipients: inicialRecipients }: RecipientPr
         }
     }, []);
 
+    const handleUpdateRecipient = (id: string) => {
+        navigate(`/update-recipient/${id}`);
+    };
+
+    const handleDeleteRecipient = async (id: string) => {
+        if (!window.confirm('Are you sure you want to delete this recipient?')) {
+            return
+        }
+
+        try {
+            setLoading(true);
+            const sendInvoiceClient = new SendInvoiceClient(new URL("http://127.0.0.1:8080"));
+            await sendInvoiceClient.recipient.deleteRecipient(id);
+
+            setRecipients(prev => prev.filter(recipient => recipient.id !== id));
+
+            console.log('Recipient deleted successfully');
+        } catch (error) {
+            console.error('Error deleting recipient:', error);
+            setError('Error deleting recipient');
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const prepareTableData = () => {
-        const headers = ['Name', 'Phone', 'Email', 'Address'];
+        const headers = ['Name', 'Phone', 'Email', 'Address', 'Update', 'Delete'];
 
         if (!recipients || !Array.isArray(recipients)) {
             return { headers, data: [] };
@@ -52,12 +78,30 @@ export default function Recipient({ recipients: inicialRecipients }: RecipientPr
         const data = recipients.map(recipient => ({
             'Name': recipient.recipientName,
             'Phone': recipient.phone,
-            // 'Email': recipient.(no existe todavia)
-            'Address': recipient.addressId,
+            'Email': recipient.email,
+            'Address': `${recipient.address.streetAddress1}, ${recipient.address.city}, ${recipient.address.country}`,
+            'Update': (
+                <button
+                    className="update-button"
+                    onClick={() => handleUpdateRecipient(recipient.id)}
+                >
+                    <FaEdit />
+                    Update
+                </button>
+            ),
+            'Delete': (
+                <button
+                    className="delete-button"
+                    onClick={() => handleDeleteRecipient(recipient.id)}
+                >
+                    <FaEraser />
+                    Delete
+                </button>
+            )
         }));
-
         return { headers, data };
     };
+
 
     const { headers, data } = prepareTableData();
 
@@ -67,22 +111,19 @@ export default function Recipient({ recipients: inicialRecipients }: RecipientPr
             <div className="dashboard-content-area">
                 <h1 className="dashboard-title">Recipients</h1>
                 <div className="recipient-content-area">
-                    <Link className='recipient-link' to='/new-recipient' style={{ textDecoration: 'none' }}>
+                    <Link className='recipient-link' to='/new-recipient'>
                         <FaPlus /><h3>Create New Recipient</h3>
                     </Link>
-                    <Link className='recipient-link' to='/update-recipient' style={{ textDecoration: 'none' }}>
-                        <FaEdit /><h3>Update Recipient</h3>
-                    </Link>
                 </div>
-                <div style={{ marginTop: '20px' }}>
+                <div>
                     {loading ? (
-                        <div style={{ textAlign: 'center', padding: '20px' }}>
+                        <div className="loading-container">
                             <p>Loading recipients...</p>
                         </div>
                     ) : error ? (
-                        <div style={{ textAlign: 'center', padding: '20px' }}>
-                            <p style={{ color: 'red' }}>{error}</p>
-                            <button onClick={loadRecipients}>Retry Loading Recipients</button>
+                        <div className="error-container">
+                            <p>{error}</p>
+                            <Button onClick={loadRecipients}>Retry Loading Recipients</Button>
                         </div>
                     ) : recipients.length > 0 ? (
                         <Table
@@ -91,9 +132,12 @@ export default function Recipient({ recipients: inicialRecipients }: RecipientPr
                             className="recipients-table"
                         />
                     ) : (
-                        <div style={{ textAlign: 'center', padding: '20px' }}>
+                        <div className="empty-container">
                             <p>No recipients available</p>
-                            <button onClick={loadRecipients}>Load Recipients</button>
+                            <Button
+                                onClick={loadRecipients}>
+                                Load Recipients
+                            </Button>
                         </div>
                     )}
                 </div>

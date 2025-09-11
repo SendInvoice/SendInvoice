@@ -11,27 +11,77 @@ import Navbar from "../../components/molecules/Navbar";
 import { SendInvoiceClient } from "../../services/SendInvoice";
 
 import type { Recipient } from "../../services/SendInvoice/Invoice/RecipientClient";
+import type { CreateInvoiceItemPayload, CreateInvoicePayload } from "../../services/SendInvoice/Invoice";
+
 
 export default function Invoice() {
-  // falta pedirle al back la lista de los recipients
   // falta setear los datos del usuario que crea el invoice (address, firma, logo)
+
+  const handleCreateInvoice = async () => {
+    if (!selectedRecipient) {
+      alert("Please select a recipient.");
+      return;
+    }
+
+    if (data.length === 0) {
+      alert("Please add at least one item to the invoice.");
+      return;
+    }
+
+    const createInvoicePayload: CreateInvoicePayload = {
+      invoiceNumber: `INV-${Date.now()}`,
+      subtotal,
+      tax: taxAmount,
+      total,
+      date: new Date(),
+      dueDate: new Date(),
+      notes: note,
+      billToAddressId: selectedRecipient.address.id,
+      shipToAddressId: selectedRecipient.address.id,
+      userId: "d2bf5015-cd42-410f-a4d5-05f033012e03",
+      companyId: "730af3a5-f1eb-4d7b-99dd-71f5f34da524",
+      recipientId: selectedRecipient.id,
+      items: data.map((item) => ({
+        description: item.description,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        amount: item.amount,
+      })),
+    };
+
+    try {
+      const sendInvoice = new SendInvoiceClient(new URL("http://127.0.0.1:8080"));
+      const createdInvoice = await sendInvoice.invoice.createInvoice(createInvoicePayload);
+
+      console.log("Invoice created:", createdInvoice);
+      alert("Invoice created successfully!");
+
+      setSelectedRecipient(null);
+      setData([]);
+      setSelectedTaxRate(0);
+    } catch (error) {
+      console.error("Failed to create invoice:", error);
+      alert("Error creating invoice. Check console for details.");
+    }
+  };
+
+  const [showNote, setShowNote] = useState(false);
+  const [note, setNote] = useState("");
 
   const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [selectedRecipient, setSelectedRecipient] = useState<Recipient | null>(
     null,
   );
   const [showDropdown, setShowDropdown] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<CreateInvoiceItemPayload[]>([]);
 
   useEffect(() => {
     (async () => {
-      const sendInvoice = new SendInvoiceClient(
-        new URL("http://127.0.0.1:8080"),
-      );
-      const remoteRecipients = await sendInvoice.recipient.getRecipients();
+      const sendInvoice = new SendInvoiceClient(new URL("http://127.0.0.1:8080"));
+      const recipients = await sendInvoice.recipient.getRecipients();
 
-      if (Array.isArray(remoteRecipients)) {
-        setRecipients(remoteRecipients);
+      if (Array.isArray(recipients)) {
+        setRecipients(recipients);
       }
     })();
   }, []);
@@ -39,16 +89,17 @@ export default function Invoice() {
   const headers = ["Quantity", "Item", "Price", "Amount"];
   const tableData = data.map((row) => ({
     Quantity: row.quantity,
-    Item: row.item,
-    Price: `$${row.price.toFixed(2)}`,
+    Item: row.description,
+    Price: `$${row.unitPrice.toFixed(2)}`,
     Amount: `$${row.amount.toFixed(2)}`,
   }));
 
   const [showModal, setShowModal] = useState(false);
-  const [newRow, setNewRow] = useState({
+  const [newRow, setNewRow] = useState<CreateInvoiceItemPayload>({
     quantity: 0,
-    item: "",
-    price: 0,
+    description: "",
+    unitPrice: 0,
+    amount: 0,
   });
 
   const [showTaxSelector, setShowTaxSelector] = useState(false);
@@ -190,8 +241,26 @@ export default function Invoice() {
             </div>
           </div>
         </div>
+        <div className="invoice-note">
+          {!showNote ? (
+            <Button className="note-button" onClick={() => setShowNote(true)}>
+              Add Note
+            </Button>
+          ) : (
+            <textarea
+              className="note-textarea"
+              placeholder="Add note"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+            />
+          )}
+        </div>
         <div>
-          <Button className="create-button">Create</Button>
+          <Button
+            className="create-button"
+            onClick={handleCreateInvoice}>
+            Create
+          </Button>
         </div>
         {showModal && (
           <Modal>
@@ -211,9 +280,9 @@ export default function Invoice() {
                 Item:
                 <Input
                   type="text"
-                  value={newRow.item}
+                  value={newRow.description}
                   onChange={(e) =>
-                    setNewRow({ ...newRow, item: e.target.value })
+                    setNewRow({ ...newRow, description: e.target.value })
                   }
                 />
               </label>
@@ -221,9 +290,9 @@ export default function Invoice() {
                 Price:
                 <Input
                   type="number"
-                  value={newRow.price}
+                  value={newRow.unitPrice}
                   onChange={(e) =>
-                    setNewRow({ ...newRow, price: parseFloat(e.target.value) })
+                    setNewRow({ ...newRow, unitPrice: parseFloat(e.target.value) })
                   }
                 />
               </label>
@@ -232,16 +301,14 @@ export default function Invoice() {
                 <Button
                   className="button"
                   onClick={() => {
-                    const newId = data.length + 1;
-                    const newEntry = {
-                      id: newId,
+                    const newEntry: CreateInvoiceItemPayload = {
                       quantity: newRow.quantity,
-                      item: newRow.item,
-                      price: newRow.price,
-                      amount: newRow.quantity * newRow.price,
+                      description: newRow.description,
+                      unitPrice: newRow.unitPrice,
+                      amount: newRow.quantity * newRow.unitPrice,
                     };
                     setData([...data, newEntry]);
-                    setNewRow({ quantity: 0, item: "", price: 0 });
+                    setNewRow({ quantity: 0, description: "", unitPrice: 0, amount: 0 });
                     setShowModal(false);
                   }}
                 >

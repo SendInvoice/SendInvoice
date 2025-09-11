@@ -60,7 +60,7 @@ export class InvoiceService {
   async find(): Promise<Invoice[]> {
     const invoices = await this.invoiceRepository.find({
       where: {},
-      relations: ['billToAddress', 'shipToAddress', 'company', 'recipientCompany', 'user', 'items'],
+      relations: ['billToAddress', 'shipToAddress', 'company', 'recipient', 'user', 'items'],
       order: { createdAt: 'DESC' }
     });
 
@@ -70,7 +70,7 @@ export class InvoiceService {
   async findById(id: string): Promise<Invoice | null> {
     const invoice = await this.invoiceRepository.findOne({
       where: { id },
-      relations: ['billToAddress', 'shipToAddress', 'company', 'recipientCompany', 'user', 'items'],
+      relations: ['billToAddress', 'shipToAddress', 'company', 'recipient', 'user', 'items'],
     });
 
     return invoice || null;
@@ -79,7 +79,7 @@ export class InvoiceService {
   async findByUserId(userId: string): Promise<Invoice[]> {
     const invoice = await this.invoiceRepository.find({
       where: { user: { id: userId } },
-      relations: ['billToAddress', 'shipToAddress', 'company', 'recipientCompany', 'user', 'items'],
+      relations: ['billToAddress', 'shipToAddress', 'company', 'recipient', 'user', 'items'],
       order: { createdAt: 'DESC' }
     });
     return invoice
@@ -88,7 +88,7 @@ export class InvoiceService {
   async findByCompanyId(companyId: string): Promise<Invoice[]> {
     const invoice = await this.invoiceRepository.find({
       where: { user: { id: companyId } },
-      relations: ['billToAddress', 'shipToAddress', 'company', 'recipientCompany', 'user', 'items'],
+      relations: ['billToAddress', 'shipToAddress', 'company', 'recipient', 'user', 'items'],
       order: { createdAt: 'DESC' }
     });
     return invoice

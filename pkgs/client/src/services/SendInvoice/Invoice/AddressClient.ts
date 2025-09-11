@@ -136,9 +136,6 @@ export class AddressClient {
 
         const response = await fetch(url, {
             method: 'DELETE',
-            headers: {
-                'Content-type': 'application/json'
-            },
         });
 
         if (response.status === 404) {
