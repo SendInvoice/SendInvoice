@@ -84,7 +84,7 @@ export class RecipientClient {
         }
 
         const url = new URL(this.baseUrl);
-        url.pathname = `/api/v1/invoice/recipients`;
+        url.pathname = `/api/v1/invoice/recipient`;
 
         const response = await fetch(url, {
             method: 'POST',
