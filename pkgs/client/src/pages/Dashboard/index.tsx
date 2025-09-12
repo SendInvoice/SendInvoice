@@ -9,9 +9,10 @@ import type { Invoice } from '../../services/SendInvoice/Invoice';
 import Navbar from '../../components/molecules/Navbar';
 
 export default function Dashboard() {
-    const [hasInvoices, setHasInvoices] = useState(false);     
-    const [isLoading, setIsLoading] = useState(true);                  
+    const [hasInvoices, setHasInvoices] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [invoices, setInvoices] = useState<Invoice[]>([]);
+
     useEffect(() => {
         const checkUserInvoices = async () => {
             try {

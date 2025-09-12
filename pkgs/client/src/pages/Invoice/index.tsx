@@ -1,21 +1,31 @@
+import { useEffect, useState } from "react";
 import { FaChevronDown, FaPlus } from "react-icons/fa";
 
 import { Button } from "../../components/atoms/Button";
-
-import "./Invoice.css";
-import { useEffect, useState } from "react";
 import { Table } from "../../components/atoms/Table";
 import { Modal } from "../../components/atoms/Modal";
 import { Input } from "../../components/atoms/Input";
 import Navbar from "../../components/molecules/Navbar";
 import { SendInvoiceClient } from "../../services/SendInvoice";
+import { useUser } from "../../hooks/user";
 
 import type { Recipient } from "../../services/SendInvoice/Invoice/RecipientClient";
 import type { CreateInvoiceItemPayload, CreateInvoicePayload } from "../../services/SendInvoice/Invoice";
 
+import "./Invoice.css";
 
 export default function Invoice() {
   // falta setear los datos del usuario que crea el invoice (address, firma, logo)
+  const [showNote, setShowNote] = useState(false);
+  const [note, setNote] = useState("");
+
+  const [recipients, setRecipients] = useState<Recipient[]>([]);
+  const [selectedRecipient, setSelectedRecipient] = useState<Recipient | null>(
+    null,
+  );
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [data, setData] = useState<CreateInvoiceItemPayload[]>([]);
+  const user = useUser();
 
   const handleCreateInvoice = async () => {
     if (!selectedRecipient) {
@@ -65,16 +75,6 @@ export default function Invoice() {
     }
   };
 
-  const [showNote, setShowNote] = useState(false);
-  const [note, setNote] = useState("");
-
-  const [recipients, setRecipients] = useState<Recipient[]>([]);
-  const [selectedRecipient, setSelectedRecipient] = useState<Recipient | null>(
-    null,
-  );
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [data, setData] = useState<CreateInvoiceItemPayload[]>([]);
-
   useEffect(() => {
     (async () => {
       const sendInvoice = new SendInvoiceClient(new URL("http://127.0.0.1:8080"));
@@ -120,7 +120,7 @@ export default function Invoice() {
   return (
     <div className="invoice-layout">
       <Navbar />
-
+      {user?.name}
       <h2 className="h2">
         <FaPlus /> Create a new Invoice
       </h2>
