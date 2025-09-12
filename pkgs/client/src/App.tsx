@@ -1,5 +1,5 @@
 import { StrictMode } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
@@ -16,6 +16,8 @@ function App() {
     <StrictMode>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Navigate to="/auth" replace />}/>
+
           <Route path="/dashboard" element={ <Dashboard /> } />
           <Route path="/auth" element={ <Auth /> } />
           <Route path="/recipient" element={ <Recipient recipients={[]}/> } />

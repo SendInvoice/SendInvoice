@@ -1,7 +1,16 @@
-.user-container {
+.sender-container {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   padding: 40px 20px;
+  background-color: #f4f4f4;
+  min-height: calc(100vh - 60px);
+}
+
+.sender-info-container {
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
   background-color: #f4f4f4;
   min-height: calc(100vh - 60px);
 }
@@ -40,4 +49,14 @@
 .user-email {
   font-size: 16px;
   color: #666;
+}
+
+.icon {
+  margin-top: 5px;
+  align-items: center;
+  font-size: 1.2rem;
+  flex-direction: column-reverse;
+  display: flex;
+  justify-self: auto;
+  justify-content: baseline;
 }
