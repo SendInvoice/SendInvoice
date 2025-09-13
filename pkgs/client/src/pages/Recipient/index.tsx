@@ -2,7 +2,6 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import './Recipient.css';
 import { FaEdit, FaEraser, FaPlus } from 'react-icons/fa';
-import Navbar from '../../components/molecules/Navbar';
 import type { Recipient } from '../../services/SendInvoice/Invoice/RecipientClient';
 import { useEffect, useState } from 'react';
 import { SendInvoiceClient } from '../../services/SendInvoice';
@@ -107,7 +106,6 @@ export default function Recipient({ recipients: inicialRecipients }: RecipientPr
 
     return (
         <div className="recipient-layout">
-            <Navbar />
             <div className="dashboard-content-area">
                 <h1 className="dashboard-title">Recipients</h1>
                 <div className="recipient-content-area">

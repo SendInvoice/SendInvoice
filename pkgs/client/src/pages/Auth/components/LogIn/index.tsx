@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, type FormEvent } from "react";
+import { useContext, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { UserContext } from "../../../../contexts/UserContext";
@@ -14,13 +14,6 @@ export default function LogIn() {
   const [email, setEmail] = useState("");
   const userContext = useContext(UserContext);
   const navigate = useNavigate();
-
-  useEffect(()=> {
-    (async ()=> {
-      await userContext?.resumeSession();
-      navigate("/dashboard");
-    })();
-  });
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();

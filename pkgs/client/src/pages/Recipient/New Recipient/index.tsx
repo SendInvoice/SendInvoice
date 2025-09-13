@@ -8,7 +8,6 @@ import { Input } from "../../../components/atoms/Input";
 import "./newRecipients.css";
 import { Modal } from "../../../components/atoms/Modal";
 import { SendInvoiceClient } from "../../../services/SendInvoice";
-import Navbar from "../../../components/molecules/Navbar";
 
 export default function NewRecipients() {
   const [message, setMessage] = useState<string | null>(null);
@@ -39,7 +38,7 @@ export default function NewRecipients() {
       setMessage(null);
       const sendInvoiceClient = new SendInvoiceClient(new URL("http://127.0.0.1:8080"));
       const newAddress = await sendInvoiceClient.address.createAddress(address);
-      const recipient = await sendInvoiceClient.recipient.createRecipient({
+      await sendInvoiceClient.recipient.createRecipient({
         addressId: newAddress.id,
         recipientName: name,
         phone,
@@ -95,7 +94,6 @@ export default function NewRecipients() {
 
   return (
     <div>
-      <Navbar />
       <h2 className="h2">
         <FaPlus /> Add a new Recipient
       </h2>

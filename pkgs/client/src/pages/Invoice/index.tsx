@@ -5,9 +5,7 @@ import { Button } from "../../components/atoms/Button";
 import { Table } from "../../components/atoms/Table";
 import { Modal } from "../../components/atoms/Modal";
 import { Input } from "../../components/atoms/Input";
-import Navbar from "../../components/molecules/Navbar";
 import { SendInvoiceClient } from "../../services/SendInvoice";
-import { useUser } from "../../hooks/user";
 
 import type { Recipient } from "../../services/SendInvoice/Invoice/RecipientClient";
 import type { CreateInvoiceItemPayload, CreateInvoicePayload } from "../../services/SendInvoice/Invoice";
@@ -25,7 +23,6 @@ export default function Invoice() {
   );
   const [showDropdown, setShowDropdown] = useState(false);
   const [data, setData] = useState<CreateInvoiceItemPayload[]>([]);
-  const user = useUser();
 
   const handleCreateInvoice = async () => {
     if (!selectedRecipient) {
@@ -119,8 +116,6 @@ export default function Invoice() {
 
   return (
     <div className="invoice-layout">
-      <Navbar />
-      {user?.name}
       <h2 className="h2">
         <FaPlus /> Create a new Invoice
       </h2>
