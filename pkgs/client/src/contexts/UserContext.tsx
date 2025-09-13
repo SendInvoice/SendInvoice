@@ -11,6 +11,7 @@ export type Props = {
 export interface IUserContext {
   user: User | null;
   login(email: string): Promise<void>;
+  logout(): void;
   resumeSession(): Promise<void>;
 }
 
@@ -30,6 +31,11 @@ export function UserContextProvider({ children }: Props): JSX.Element {
     setUser(user);
   };
 
+    const logout = () => {
+    localStorage.removeItem('userToken');
+    setUser(null);
+  };
+
   const resumeSession = async () => {
     const token = localStorage.getItem('userToken');
     if (token) {
@@ -40,7 +46,7 @@ export function UserContextProvider({ children }: Props): JSX.Element {
   }
 
   return (
-    <UserContext.Provider value={{ user, login, resumeSession }}>
+    <UserContext.Provider value={{ user, login, logout, resumeSession }}>
       {children}
     </UserContext.Provider>
   );

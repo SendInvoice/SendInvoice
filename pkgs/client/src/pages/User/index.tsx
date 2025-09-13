@@ -1,19 +1,30 @@
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useContext } from 'react';
 
-import './User.css'
-
-import conchoImage from '../../assets/concho.png';
-import Navbar from '../../components/molecules/Navbar';
 import { Button } from '../../components/atoms/Button';
 import { FaDoorOpen } from 'react-icons/fa';
+import { UserContext } from '../../contexts/UserContext';
+
+import Navbar from '../../components/molecules/Navbar';
+import './User.css'
+
 
 export default function User() {
+  const userContext = useContext(UserContext);
+  const navigate = useNavigate();
 
-  const user = {
-    firstName: 'Conchito',
-    lastName: 'Martínez',
-    email: 'concho.martinezOcasio@example.com',
-    profileImageUrl: conchoImage,
+ useEffect(() => {
+    if (!userContext?.user) {
+      userContext?.resumeSession();
+    }
+  }, [userContext]);
+
+  const handleLogOut = async () => {
+    await userContext?.logout();
+    navigate("/auth");
   };
+
+  const { firstName, lastName, email } = userContext!.user;
 
   return (
     <div>
@@ -24,17 +35,18 @@ export default function User() {
             <h3>User Info</h3>
             <div className="user-avatar-wrapper">
               <img
-                src={user.profileImageUrl}
+                src="https://via.placeholder.com/150"
                 alt="Foto de perfil"
                 className="user-avatar"
               />
             </div>
             <h2 className="user-name">
-              {user.firstName} {user.lastName}
+              {firstName} {lastName}
             </h2>
-            <p className="user-email">{user.email}</p>
+            <p className="user-email">{email}</p>
             <Button
               className="log-out-button"
+              onClick={handleLogOut}
             >
               <FaDoorOpen className="button-icon" />
             </Button>
