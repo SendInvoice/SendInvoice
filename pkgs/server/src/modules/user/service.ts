@@ -2,12 +2,11 @@ import { In, Repository } from 'typeorm';
 
 import { User } from './entity';
 
-export type CreateUserDto = Omit<
-  User,
-  | 'id'
-  | 'createdAt'
-  | 'updatedAt'
->;
+export type CreateUserDto = {
+  name: string;
+  surname: string;
+  email: string;
+}
 
 export class UserService {
   private userRepository: Repository<User>;

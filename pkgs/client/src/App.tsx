@@ -8,8 +8,9 @@ import "./App.css";
 import Invoice from "./pages/Invoice";
 import User from "./pages/User";
 import NewRecipients from "./pages/Recipient/New Recipient";
-import UpdateRecipients from "./pages/Recipient/Update Recipient";
+import UpdateRecipient from "./pages/Recipient/UpdateRecipient";
 import Recipient from "./pages/Recipient";
+
 import { UserContext, UserContextProvider } from "./contexts/UserContext";
 
 function App() {
@@ -31,8 +32,8 @@ function App() {
                     element={<Recipient recipients={[]} />}
                   />
                   <Route
-                    path="/update-recipient"
-                    element={<UpdateRecipients />}
+                    path="/update-recipient/:id"
+                    element={<UpdateRecipient />}
                   />
                   <Route path="/new-recipient" element={<NewRecipients />} />
                   <Route path="/invoice" element={<Invoice />} />

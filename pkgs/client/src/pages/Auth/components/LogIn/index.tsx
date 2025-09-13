@@ -1,4 +1,4 @@
-import { useContext, useState, type FormEvent } from "react";
+import { useContext, useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { UserContext } from "../../../../contexts/UserContext";
@@ -15,6 +15,13 @@ export default function LogIn() {
   const userContext = useContext(UserContext);
   const navigate = useNavigate();
 
+  useEffect(()=> {
+    (async ()=> {
+      await userContext?.resumeSession();
+      navigate("/dashboard");
+    })();
+  });
+
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
     setErrorMessage(null);
@@ -24,32 +31,6 @@ export default function LogIn() {
 
     await userContext?.login(email);
     navigate("/dashboard");
-
-    try {
-      const res = await fetch("http://localhost:8080/api/v1/auth/log-in", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-        }),
-      });
-
-      if (res.ok) {
-        const resBody = await res.json();
-        console.log(resBody);
-
-        localStorage.setItem("authToken", resBody.token);
-
-        setDone(true);
-        navigate("/dashboard");
-      } else {
-        setErrorMessage("Error during login");
-      }
-    } catch (error) {
-      setErrorMessage("Error during login");
-    }
   };
 
   return (
