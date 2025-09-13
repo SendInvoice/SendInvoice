@@ -5,30 +5,31 @@ import { Button } from '../../components/atoms/Button';
 import { FaDoorOpen } from 'react-icons/fa';
 import { UserContext } from '../../contexts/UserContext';
 
-import Navbar from '../../components/molecules/Navbar';
 import './User.css'
+import { useUser } from '../../hooks/user';
+import type { User } from '../../services/SendInvoice/Auth';
 
 
 export default function User() {
   const userContext = useContext(UserContext);
+  const user = useUser();
   const navigate = useNavigate();
 
  useEffect(() => {
-    if (!userContext?.user) {
+    if (!user) {
       userContext?.resumeSession();
     }
-  }, [userContext]);
+  }, [userContext, user]);
 
   const handleLogOut = async () => {
-    await userContext?.logout();
+    userContext?.logout();
     navigate("/auth");
   };
 
-  const { firstName, lastName, email } = userContext!.user;
+  const { name, surname, email } = user as User;
 
   return (
     <div>
-      <Navbar />
       <div className="sender-container">
         <div className="user-container">
           <div className="user-card">
@@ -41,7 +42,7 @@ export default function User() {
               />
             </div>
             <h2 className="user-name">
-              {firstName} {lastName}
+              {name} {surname}
             </h2>
             <p className="user-email">{email}</p>
             <Button

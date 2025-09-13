@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import SignUp from "./components/SignUp";
 import LogIn from "./components/LogIn";
@@ -12,10 +12,6 @@ enum AuthState {
 
 export default function Auth() {
   const [authState, setAuthState] = useState(AuthState.Login);
-
-  useEffect(() => {
-
-  }, []);
 
   return (
     <div className="auth-container">

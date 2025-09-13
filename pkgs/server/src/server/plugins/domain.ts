@@ -24,12 +24,13 @@ export const domainServicesPlugin = fp(async (server) => {
   try {
     const config = readConfig();
     const appDataSource = new DataSource({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: config.postgresUser,
-      password: config.postgresPassword,
-      database: config.postgresDb,
+      type: 'sqlite',
+      // host: 'localhost',
+      // port: 5432,
+      // username: config.postgresUser,
+      // password: config.postgresPassword,
+      // database: config.postgresDb,
+      database: 'data.sqlite',
       logging: true,
       synchronize: true,
       entities: [
@@ -64,8 +65,14 @@ export const domainServicesPlugin = fp(async (server) => {
     const addressService = new AddressService(addressRepository);
     const companyService = new CompanyService(companyRepository);
     const recipientService = new RecipientService(recipientRepository);
-    
-    const invoiceService = new InvoiceService(invoiceRepository, invoiceItemRepository, addressService, companyService, recipientService);
+
+    const invoiceService = new InvoiceService(
+      invoiceRepository,
+      invoiceItemRepository,
+      addressService,
+      companyService,
+      recipientService
+    );
 
     const domainServices: DomainServices = {
       auth: authService,
