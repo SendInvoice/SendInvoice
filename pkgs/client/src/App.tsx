@@ -5,7 +5,6 @@ import AppLayout from "./components/templates/AppLayout";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Invoice from "./pages/Invoice";
-import User from "./pages/User";
 import NewRecipients from "./pages/Recipient/New Recipient";
 import Recipient from "./pages/Recipient";
 
@@ -13,6 +12,7 @@ import "./App.css";
 
 import { UserContextProvider } from "./contexts/UserContext";
 import AuthLayout from "./components/templates/AuthLayout";
+import Company from "./pages/Company";
 
 function App() {
   return (
@@ -33,7 +33,7 @@ function App() {
                       /> */}
               <Route path="/new-recipient" element={<NewRecipients />} />
               <Route path="/invoice" element={<Invoice />} />
-              <Route path="/user" element={<User />} />
+              <Route path="/sender" element={<Company />} />
             </Route>
             <Route path="/" element={<AuthLayout />}>
               <Route path="/" element={<Navigate to="/auth" />} />
