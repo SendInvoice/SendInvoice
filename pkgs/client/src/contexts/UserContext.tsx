@@ -12,9 +12,11 @@ export type Props = {
 
 export interface IUserContext {
   user: User | null;
+  token: string | null;
   login(email: string): Promise<void>;
   logout(): void;
   resumeSession(): Promise<void>;
+
 }
 
 export const UserContext = createContext<IUserContext | null>(null);
@@ -23,6 +25,7 @@ UserContext.displayName = "UserContext";
 
 export function UserContextProvider({ children }: Props): JSX.Element {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState <string | null>(null);
 
   useEffect(() => {
     resumeSession();
@@ -32,10 +35,11 @@ export function UserContextProvider({ children }: Props): JSX.Element {
     const sendInvoiceClient = new SendInvoiceClient(
       new URL("http://127.0.0.1:8080"),
     );
-    const token = await sendInvoiceClient.auth.login({ email });
-    const user = await sendInvoiceClient.auth.whoAmI(token.token);
+    const tokenPayload = await sendInvoiceClient.auth.login({ email });
+    setToken(tokenPayload.token);
+    const user = await sendInvoiceClient.auth.whoAmI(tokenPayload.token);
 
-    localStorage.setItem("userToken", token.token);
+    localStorage.setItem("userToken", tokenPayload.token);
     setUser(user);
   };
 
@@ -59,7 +63,7 @@ export function UserContextProvider({ children }: Props): JSX.Element {
 
   return (
     <UserContext.Provider
-      value={{ user, login, logout, resumeSession }}
+      value={{ user, token, login, logout, resumeSession }}
     >
       {children}
     </UserContext.Provider>

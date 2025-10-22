@@ -11,3 +11,8 @@ export function useUser(): User | null {
 export function useUserContext(): IUserContext | null {
   return useContext(UserContext);
 }
+
+export function useToken(): string | null {
+  const userContext = useContext(UserContext);
+  return userContext?.token || null;
+}
