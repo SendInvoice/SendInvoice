@@ -6,13 +6,15 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
-  DeleteDateColumn
+  DeleteDateColumn,
+  OneToOne,
+  JoinColumn
 } from 'typeorm';
 
 import { User } from '../../user';
 import { Address } from './Address';
+import { Image } from '../../image';
 import { Invoice } from './Invoice';
-
 import type { Relation } from 'typeorm';
 
 @Entity({
@@ -28,12 +30,6 @@ export class Company {
   @Column()
   phone: string;
 
-  @Column()
-  logo: string;
-
-  @Column()
-  signature: string;
-
   @CreateDateColumn()
   createdAt: Date;
 
@@ -48,6 +44,14 @@ export class Company {
 
   @OneToMany(() => Invoice, (invoice) => invoice.company)
   invoices: Relation<Invoice[]>;
+
+  @OneToOne(() => Image)
+  @JoinColumn()
+  logo: Relation<Image>;
+
+  @OneToOne(() => Image)
+  @JoinColumn()
+  signature: Relation<Image>;
 
   @DeleteDateColumn({ nullable: true })
   deletedAt?: Date;

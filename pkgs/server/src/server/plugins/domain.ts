@@ -5,15 +5,18 @@ import { DataSource } from 'typeorm';
 
 import { readConfig } from '../config';
 import { User, UserService } from '../../modules/user';
+import { Image } from '../../modules/image/entity';
 import { Entity as InvoiceEntity, InvoiceService } from '../../modules/invoice';
 import { Token } from '../../modules/auth/entity';
 import { AuthService } from '../../modules/auth';
 import { AddressService } from '../../modules/invoice/service/AddressService';
 import { CompanyService } from '../../modules/invoice/service/CompanyService';
 import { RecipientService } from '../../modules/invoice/service/RecipientService';
+import { ImageService } from '../../modules/image/service';
 
 export type DomainServices = {
   auth: AuthService;
+  image: ImageService;
   invoice: InvoiceService;
   user: UserService;
 };
@@ -24,17 +27,17 @@ export const domainServicesPlugin = fp(async (server) => {
   try {
     const config = readConfig();
     const appDataSource = new DataSource({
-      type: 'sqlite',
-      // host: 'localhost',
-      // port: 5432,
-      // username: config.postgresUser,
-      // password: config.postgresPassword,
-      // database: config.postgresDb,
-      database: 'data.sqlite',
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: config.postgresUser,
+      password: config.postgresPassword,
+      database: config.postgresDb,
       logging: true,
       synchronize: true,
       entities: [
         User,
+        Image,
         InvoiceEntity.Address,
         InvoiceEntity.Company,
         InvoiceEntity.Invoice,
@@ -55,6 +58,9 @@ export const domainServicesPlugin = fp(async (server) => {
     const tokenRepository = appDataSource.getRepository(Token);
     const authService = new AuthService(tokenRepository, userService);
 
+    // Image Service
+    const imageRepository = appDataSource.getRepository(Image);
+
     // Invoice Service
     const addressRepository = appDataSource.getRepository(InvoiceEntity.Address);
     const companyRepository = appDataSource.getRepository(InvoiceEntity.Company);
@@ -65,7 +71,7 @@ export const domainServicesPlugin = fp(async (server) => {
     const addressService = new AddressService(addressRepository);
     const companyService = new CompanyService(companyRepository);
     const recipientService = new RecipientService(recipientRepository);
-
+    const imageService = new ImageService(imageRepository);
     const invoiceService = new InvoiceService(
       invoiceRepository,
       invoiceItemRepository,
@@ -77,6 +83,7 @@ export const domainServicesPlugin = fp(async (server) => {
     const domainServices: DomainServices = {
       auth: authService,
       invoice: invoiceService,
+      image: imageService,
       user: userService
     };
 
