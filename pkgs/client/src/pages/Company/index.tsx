@@ -1,13 +1,113 @@
+import { useState } from "react";
 
-import './Company.css'
+import { ImageInput } from "../../components/atoms/ImageInput";
+import { Input } from "../../components/atoms/Input";
+import AddressForm from "../../components/molecules/AddressForm";
+import { SendInvoiceClient } from "../../services/SendInvoice";
+import { useToken, useUser } from "../../hooks/user";
+
+import type { AddressFormFields } from "../../components/molecules/AddressForm";
+
+import "./Company.css";
 
 export default function Company() {
+  const token = useToken();
+  const user = useUser();
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    logoId: "",
+    signatureId: "",
+    address: {
+      streetAddress1: "",
+      streetAddress2: "",
+      city: "",
+      cityArea: "",
+      postalCode: "",
+      country: "",
+    },
+  });
+
+  const handleSubmit = async () => {
+    const sendInvoiceClient = new SendInvoiceClient(
+      new URL("http://127.0.0.1:8080"),
+    );
+
+    const { id: addressId } = await sendInvoiceClient.address.createAddress(form.address);
+
+    await sendInvoiceClient.company.createCompany(token as string, {
+      name: form.name,
+      phone: form.phone,
+      logoId: form.logoId,
+      userId: user?.id as string,
+      signatureId: form.signatureId,
+      addressId: addressId,
+    })
+  }
+
+  const handleFileChosen = async (name: string, file: File) => {
+    const sendInvoiceClient = new SendInvoiceClient(
+      new URL("http://127.0.0.1:8080"),
+    );
+    const { id: imageId } = await sendInvoiceClient.image.uploadImage(
+      token as string,
+      file,
+    );
+
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: imageId,
+    }));
+  };
+
+  const handleAddressChange = (address: AddressFormFields) => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      address,
+    }));
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
+  };
 
   return (
-    <div className='company-layout'>
+    <div className="company-layout">
       <div>
         <h1> COMPANY</h1>
-        </div>
+      </div>
+      <Input
+        type="text"
+        name="name"
+        value={form.name}
+        onChange={handleInputChange}
+        placeholder="Name"
+      />
+      <Input
+        type="text"
+        name="phone"
+        value={form.phone}
+        onChange={handleInputChange}
+        placeholder="Phone"
+      />
+      <AddressForm onChange={handleAddressChange} />
+      <ImageInput
+        name="logoId"
+        label="Company Logo"
+        onFileChosen={handleFileChosen}
+      />
+      <ImageInput
+        name="signatureId"
+        label="Signature"
+        onFileChosen={handleFileChosen}
+      />
+      <button type="button" onClick={handleSubmit}>
+        Submit
+      </button>
     </div>
   );
 }

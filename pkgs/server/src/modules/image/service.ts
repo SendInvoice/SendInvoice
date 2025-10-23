@@ -30,4 +30,12 @@ export class ImageService {
 
     return this.imageRepository.save(image);
   }
+
+  async findById(id: string): Promise<Image | null> {
+    const image = await this.imageRepository.findOne({
+      where: { id },
+    });
+
+    return image || null;
+  }
 }
