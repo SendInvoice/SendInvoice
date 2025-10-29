@@ -13,34 +13,37 @@ import "./App.css";
 import { UserContextProvider } from "./contexts/UserContext";
 import AuthLayout from "./components/templates/AuthLayout";
 import Company from "./pages/Company";
+import { CompanyContextProvider } from "./contexts/CompanyContext";
 
 function App() {
   return (
     <StrictMode>
       <UserContextProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<AppLayout />}>
-              <Route path="/" element={<Navigate to="/dashboard" />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route
-                path="/recipient"
-                element={<Recipient recipients={[]} />}
-              />
-              {/* <Route
-                        path="/update-recipient/:id"
-                        element={<UpdateRecipient />}
-                      /> */}
-              <Route path="/new-recipient" element={<NewRecipients />} />
-              <Route path="/invoice" element={<Invoice />} />
-              <Route path="/sender" element={<Company />} />
-            </Route>
-            <Route path="/" element={<AuthLayout />}>
-              <Route path="/" element={<Navigate to="/auth" />} />
-              <Route path="/auth" element={<Auth />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
+        <CompanyContextProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<AppLayout />}>
+                <Route path="/" element={<Navigate to="/dashboard" />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route
+                  path="/recipient"
+                  element={<Recipient recipients={[]} />}
+                />
+                {/* <Route
+                          path="/update-recipient/:id"
+                          element={<UpdateRecipient />}
+                        /> */}
+                <Route path="/new-recipient" element={<NewRecipients />} />
+                <Route path="/invoice" element={<Invoice />} />
+                <Route path="/sender" element={<Company />} />
+              </Route>
+              <Route path="/" element={<AuthLayout />}>
+                <Route path="/" element={<Navigate to="/auth" />} />
+                <Route path="/auth" element={<Auth />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </CompanyContextProvider>
       </UserContextProvider>
     </StrictMode>
   );

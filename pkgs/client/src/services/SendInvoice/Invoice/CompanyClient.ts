@@ -36,7 +36,7 @@ export class CompanyClient {
     this.baseUrl = baseUrl;
   }
 
-  async getCompanies(): Promise<Company[]> {
+  async getCompanies(token: string): Promise<Company[]> {
     const url = new URL(this.baseUrl);
     url.pathname = `/api/v1/invoice/company`;
 
@@ -44,6 +44,7 @@ export class CompanyClient {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 

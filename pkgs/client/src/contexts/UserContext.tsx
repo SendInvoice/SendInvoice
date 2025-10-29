@@ -16,7 +16,6 @@ export interface IUserContext {
   login(email: string): Promise<void>;
   logout(): void;
   resumeSession(): Promise<void>;
-
 }
 
 export const UserContext = createContext<IUserContext | null>(null);
