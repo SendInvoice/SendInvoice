@@ -75,39 +75,77 @@ export default function Company() {
     }));
   };
 
-  return (
+return (
     <div className="company-layout">
-      <div>
-        <h1> COMPANY</h1>
+      <h1>Create Company</h1>
+      
+      <div className="company-form-container">
+        <div className="company-form-section">
+          <h2>Basic Information</h2>
+          
+          <div className="company-input-group">
+            <label htmlFor="name">Company Name</label>
+            <Input
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleInputChange}
+              placeholder="Enter company name"
+            />
+          </div>
+
+          <div className="company-input-group">
+            <label htmlFor="phone">Phone Number</label>
+            <Input
+              type="text"
+              name="phone"
+              value={form.phone}
+              onChange={handleInputChange}
+              placeholder="Enter phone number"
+            />
+          </div>
+        </div>
+
+        <div className="company-form-section">
+          <h2>Company Address</h2>
+          <div className="company-address-section">
+            <AddressForm onChange={handleAddressChange} />
+          </div>
+        </div>
+
+        <div className="company-form-section">
+          <h2>Images & Branding</h2>
+          <div className="company-images-section">
+            <ImageInput
+              name="logoId"
+              label="Company Logo"
+              onFileChosen={handleFileChosen}
+            />
+            <ImageInput
+              name="signatureId"
+              label="Signature"
+              onFileChosen={handleFileChosen}
+            />
+          </div>
+        </div>
+
+        <div className="company-submit-container">
+          <button 
+            type="button" 
+            className="company-cancel-button"
+            onClick={() => window.history.back()}
+          >
+            Cancel
+          </button>
+          <button 
+            type="button" 
+            className="company-submit-button"
+            onClick={handleSubmit}
+          >
+            Create Company
+          </button>
+        </div>
       </div>
-      <Input
-        type="text"
-        name="name"
-        value={form.name}
-        onChange={handleInputChange}
-        placeholder="Name"
-      />
-      <Input
-        type="text"
-        name="phone"
-        value={form.phone}
-        onChange={handleInputChange}
-        placeholder="Phone"
-      />
-      <AddressForm onChange={handleAddressChange} />
-      <ImageInput
-        name="logoId"
-        label="Company Logo"
-        onFileChosen={handleFileChosen}
-      />
-      <ImageInput
-        name="signatureId"
-        label="Signature"
-        onFileChosen={handleFileChosen}
-      />
-      <button type="button" onClick={handleSubmit}>
-        Submit
-      </button>
     </div>
   );
 }

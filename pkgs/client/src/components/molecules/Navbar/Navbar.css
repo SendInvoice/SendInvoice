@@ -22,7 +22,8 @@
 }
 
 .navbar-button,
-.user-dropdown-trigger {
+.user-dropdown-trigger,
+.company-dropdown-trigger {
   background: transparent;
   border: none;
   cursor: pointer;
@@ -38,7 +39,8 @@
   align-items: center;
 }
 
-.user-dropdown-trigger {
+.user-dropdown-trigger,
+.company-dropdown-trigger {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -47,21 +49,25 @@
 }
 
 .navbar-button:hover,
-.user-dropdown-trigger:hover {
+.user-dropdown-trigger:hover,
+.company-dropdown-trigger:hover {
   color: blueviolet;
   transform: scale(1.008);
 }
 
-.user-dropdown-trigger:hover {
+.user-dropdown-trigger:hover,
+.company-dropdown-trigger:hover {
   background-color: rgba(138, 43, 226, 0.1);
   transform: none;
 }
 
-.user-dropdown {
+.user-dropdown,
+.company-dropdown {
   position: relative;
 }
 
-.user-icon {
+.user-icon,
+.company-icon {
   font-size: 1.2rem;
 }
 
@@ -74,10 +80,10 @@
   transform: rotate(180deg);
 }
 
-.user-dropdown-menu {
+.user-dropdown-menu,
+.company-dropdown-menu {
   position: absolute;
   top: calc(100% + 0.5rem);
-  right: 0;
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 0.5rem;
@@ -87,26 +93,76 @@
   animation: dropdownFadeIn 0.2s ease-out;
 }
 
-.user-card-dropdown {
+.user-dropdown-menu {
+  right: 0;
+}
+
+.company-dropdown-menu {
+  left: 0;
+}
+
+.user-card-dropdown,
+.company-card-dropdown {
   padding: 1.5rem;
   text-align: center;
 }
 
-.user-name-dropdown {
+.user-name-dropdown,
+.company-name-dropdown {
   font-size: 1.1rem;
   font-weight: bold;
   color: #333;
   margin: 0 0 0.5rem 0;
 }
 
-.user-email-dropdown {
+.user-email-dropdown,
+.company-id-dropdown {
   font-size: 0.9rem;
   color: #666;
   margin: 0 0 1rem 0;
-
 }
 
-.log-out-button-dropdown {
+.company-list-dropdown {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 0.5rem 0;
+}
+
+.company-item-button {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: #333;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  border-radius: 0.25rem;
+}
+
+.company-item-button:hover {
+  background-color: rgba(138, 43, 226, 0.1);
+}
+
+.company-item-button.active {
+  background-color: rgba(138, 43, 226, 0.2);
+  font-weight: bold;
+  color: blueviolet;
+}
+
+.no-companies-text {
+  font-size: 0.9rem;
+  color: #999;
+  padding: 0.5rem;
+}
+
+.log-out-button-dropdown,
+.create-company-button-dropdown {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -122,10 +178,22 @@
   transition: background-color 0.2s ease;
 }
 
-.log-out-button-dropdown:hover {
+.log-out-button-dropdown:hover,
+.create-company-button-dropdown:hover {
   background-color: #7b2cbf;
 }
 
 .button-icon {
   font-size: 0.9rem;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

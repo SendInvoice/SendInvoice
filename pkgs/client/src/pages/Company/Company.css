@@ -1,3 +1,155 @@
 .company-layout {
   height: 100vh;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.company-layout h1 {
+  color: #333;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+
+.company-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 0.6rem;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.company-form-section {
+  margin-bottom: 2rem;
+}
+
+.company-form-section h2 {
+  color: #333;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  border-bottom: 2px solid blueviolet;
+  padding-bottom: 0.5rem;
+}
+
+.company-input-group {
+  margin-bottom: 1.5rem;
+}
+
+.company-input-group label {
+  display: block;
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.company-input-group input {
+  align-items: center;
+  background-color: #ece8e8;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  color: rgb(163, 101, 221);
+  font-size: 1rem;
+  outline-color: blueviolet;
+  padding: 0.6em 1.2em;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.company-input-group input:focus {
+  border-color: blueviolet;
+  background-color: #f5f3f8;
+}
+
+.company-input-group input::placeholder {
+  color: rgba(163, 101, 221, 0.5);
+}
+
+.company-images-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.company-address-section {
+  background-color: #f9f9f9;
+  border-radius: 0.6rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.company-submit-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ece8e8;
+}
+
+.company-submit-button {
+  background-color: blueviolet;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.company-submit-button:hover {
+  background-color: #7b2cbf;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(138, 43, 226, 0.3);
+}
+
+.company-submit-button:active {
+  transform: translateY(0);
+}
+
+.company-cancel-button {
+  background-color: transparent;
+  color: #666;
+  border: 1px solid #ece8e8;
+  border-radius: 0.5rem;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.company-cancel-button:hover {
+  background-color: #ece8e8;
+  border-color: #d0d0d0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .company-layout {
+    padding: 1rem;
+  }
+
+  .company-form-container {
+    padding: 1.5rem;
+  }
+
+  .company-images-section {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .company-submit-container {
+    flex-direction: column;
+  }
+
+  .company-submit-button,
+  .company-cancel-button {
+    width: 100%;
+  }
 }

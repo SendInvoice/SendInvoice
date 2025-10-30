@@ -47,13 +47,13 @@ export default function Navbar() {
 
   return (
     <div className="navbar">
+         {/* Dropdown Company */}
       <div className="company-dropdown">
         <button
           className="company-dropdown-trigger"
           onClick={toggleCompanyDropdown}
         >
           <FaBuilding className="company-icon" />
-          <span>{activeCompany ? activeCompany.name : 'Select Company'}</span>
           <FaChevronDown
             className={`chevron-icon ${isCompanyDropdownOpen ? "chevron-open" : ""}`}
           />
@@ -62,27 +62,39 @@ export default function Navbar() {
         {isCompanyDropdownOpen && (
           <div className="company-dropdown-menu">
             <div className="company-card-dropdown">
-              {companies && companies.length > 0 ? (
-                companies.map((company) => (
-                  <button
-                    key={company.id}
-                    className="company-item-dropdown"
-                    onClick={() => {
-                      handleCompanySelect(company.id);
-                    }}
-                  >
-                    <h4 className="company-name-dropdown">{company.name}</h4>
-                    <p className="company-id-dropdown">ID: {company.id}</p>
-                  </button>
-                ))
-              ) : (
-                <p className="no-companies-text">No companies available.</p>
-              )}
-              <button
-                className="company-item-dropdown"
+              <h3 className="company-name-dropdown">
+                {activeCompany ? activeCompany.name : 'No Company Selected'}
+              </h3>
+              <p className="company-id-dropdown">
+                {activeCompany ? `ID: ${activeCompany.id}` : 'Please select a company'}
+              </p>
+              
+              <div className="company-list-dropdown">
+                {companies && companies.length > 0 ? (
+                  companies.map((company) => (
+                    <button
+                      key={company.id}
+                      className={`company-item-button ${activeCompany?.id === company.id ? 'active' : ''}`}
+                      onClick={() => handleCompanySelect(company.id)}
+                    >
+                      {company.name}
+                    </button>
+                  ))
+                ) : (
+                  <p className="no-companies-text">No companies available.</p>
+                )}
+              </div>
+              
+              <Button
+                className="create-company-button-dropdown"
+                onClick={() => {
+                  setIsCompanyDropdownOpen(false);
+                  navigate("/Sender");
+                }}
               >
-                <p className="no-companies-text">Create Company.</p>
-              </button>
+                <FaBuilding className="button-icon" />
+                Create Company
+              </Button>
             </div>
           </div>
         )}
@@ -116,7 +128,7 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* Dropdown de usuario - Derecha */}
+      {/* Dropdown Logout */}
       <div className="user-dropdown">
         <button className="user-dropdown-trigger" onClick={toggleUserDropdown}>
           <FaUser className="user-icon" />
