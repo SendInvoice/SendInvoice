@@ -48,7 +48,7 @@ export class InvoiceService {
     invoiceItemRepository: Repository<InvoiceItem>,
     address: AddressService,
     company: CompanyService,
-    recipient: RecipientService,
+    recipient: RecipientService
   ) {
     this.invoiceRepository = invoiceRepository;
     this.invoiceItemRepository = invoiceItemRepository;
@@ -57,9 +57,11 @@ export class InvoiceService {
     this.recipient = recipient;
   }
 
-  async find(): Promise<Invoice[]> {
+  async find(query: { companyId: string }): Promise<Invoice[]> {
     const invoices = await this.invoiceRepository.find({
-      where: {},
+      where: {
+        company: { id: query.companyId }
+      },
       relations: ['billToAddress', 'shipToAddress', 'company', 'recipient', 'user', 'items'],
       order: { createdAt: 'DESC' }
     });
@@ -70,7 +72,7 @@ export class InvoiceService {
   async findById(id: string): Promise<Invoice | null> {
     const invoice = await this.invoiceRepository.findOne({
       where: { id },
-      relations: ['billToAddress', 'shipToAddress', 'company', 'recipient', 'user', 'items'],
+      relations: ['billToAddress', 'shipToAddress', 'company', 'recipient', 'user', 'items']
     });
 
     return invoice || null;
@@ -82,7 +84,7 @@ export class InvoiceService {
       relations: ['billToAddress', 'shipToAddress', 'company', 'recipient', 'user', 'items'],
       order: { createdAt: 'DESC' }
     });
-    return invoice
+    return invoice;
   }
 
   async findByCompanyId(companyId: string): Promise<Invoice[]> {
@@ -91,7 +93,7 @@ export class InvoiceService {
       relations: ['billToAddress', 'shipToAddress', 'company', 'recipient', 'user', 'items'],
       order: { createdAt: 'DESC' }
     });
-    return invoice
+    return invoice;
   }
 
   async createInvoice(dto: CreateInvoiceDto): Promise<Invoice> {
@@ -123,11 +125,11 @@ export class InvoiceService {
       user: { id: dto.userId },
       company: { id: dto.companyId },
       recipientCompany: { id: dto.recipientCompanyId },
-      items: dto.items.map(item => ({
+      items: dto.items.map((item) => ({
         amount: item.amount,
         description: item.description,
         quantity: item.quantity,
-        unitPrice: item.unitPrice,
+        unitPrice: item.unitPrice
       }))
     };
 
@@ -138,7 +140,6 @@ export class InvoiceService {
   async updateById(id: string, invoiceData: Partial<Invoice>): Promise<Invoice | null> {
     await this.invoiceRepository.update({ id }, invoiceData);
     return await this.findById(id);
-
   }
 
   async deleteById(id: string): Promise<boolean> {
@@ -146,11 +147,11 @@ export class InvoiceService {
     return result.affected !== 0;
   }
 
-  //InvoiceItems 
+  //InvoiceItems
 
   async findInvoiceItems(invoiceId: string): Promise<InvoiceItem[]> {
     const invoice = await this.invoiceRepository.findOne({
-      where: { id: invoiceId },
+      where: { id: invoiceId }
     });
 
     if (!invoice) {
@@ -172,7 +173,7 @@ export class InvoiceService {
         id: itemId,
         invoice: { id: invoiceId }
       },
-      relations: ['invoice'],
+      relations: ['invoice']
     });
 
     return item || null;
@@ -180,7 +181,7 @@ export class InvoiceService {
 
   async createInvoiceItem(invoiceId: string, dto: CreateInvoiceItemDto): Promise<InvoiceItem> {
     const invoice = await this.invoiceRepository.findOne({
-      where: { id: invoiceId },
+      where: { id: invoiceId }
     });
 
     if (!invoice) {
@@ -203,12 +204,16 @@ export class InvoiceService {
     return savedItem;
   }
 
-  async updateInvoiceItemById(invoiceId: string, itemId: string, dto: UpdateInvoiceItemDto): Promise <InvoiceItem | null> {
+  async updateInvoiceItemById(
+    invoiceId: string,
+    itemId: string,
+    dto: UpdateInvoiceItemDto
+  ): Promise<InvoiceItem | null> {
     const existingItem = await this.invoiceItemRepository.findOne({
-      where: { 
+      where: {
         id: itemId,
         invoice: { id: invoiceId }
-      },
+      }
     });
 
     if (!existingItem) {
@@ -227,16 +232,16 @@ export class InvoiceService {
 
     return await this.invoiceItemRepository.findOne({
       where: { id: itemId },
-      relations: ['invoice'],
+      relations: ['invoice']
     });
   }
 
-    async deleteInvoiceItemById(invoiceId: string, itemId: string): Promise<boolean> {
+  async deleteInvoiceItemById(invoiceId: string, itemId: string): Promise<boolean> {
     const existingItem = await this.invoiceItemRepository.findOne({
-      where: { 
+      where: {
         id: itemId,
         invoice: { id: invoiceId }
-      },
+      }
     });
 
     if (!existingItem) {
@@ -244,7 +249,7 @@ export class InvoiceService {
     }
 
     const result = await this.invoiceItemRepository.softDelete({ id: itemId });
-    
+
     if (result.affected !== 0) {
       await this.updateInvoiceTotals(invoiceId);
       return true;
@@ -255,11 +260,11 @@ export class InvoiceService {
 
   private async updateInvoiceTotals(invoiceId: string): Promise<void> {
     const items = await this.invoiceItemRepository.find({
-      where: { invoice: { id: invoiceId } },
+      where: { invoice: { id: invoiceId } }
     });
 
     const subtotal = items.reduce((sum, item) => sum + item.amount, 0);
-    
+
     const invoice = await this.invoiceRepository.findOne({
       where: { id: invoiceId }
     });
@@ -271,7 +276,7 @@ export class InvoiceService {
 
       await this.invoiceRepository.update(
         { id: invoiceId },
-        { 
+        {
           subtotal: Math.round(subtotal * 100) / 100,
           tax: Math.round(tax * 100) / 100,
           total: Math.round(total * 100) / 100

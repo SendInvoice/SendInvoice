@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { FaChevronDown, FaPlus } from "react-icons/fa";
 
 import { Button } from "../../components/atoms/Button";
@@ -6,13 +6,18 @@ import { Table } from "../../components/atoms/Table";
 import { Modal } from "../../components/atoms/Modal";
 import { Input } from "../../components/atoms/Input";
 import { SendInvoiceClient } from "../../services/SendInvoice";
+import { useActiveCompany } from "../../hooks/company";
 
 import type { Recipient } from "../../services/SendInvoice/Invoice/RecipientClient";
 import type { CreateInvoiceItemPayload, CreateInvoicePayload } from "../../services/SendInvoice/Invoice";
 
 import "./Invoice.css";
+import { useUser } from "../../hooks/user";
 
 export default function Invoice() {
+  const activeCompany = useActiveCompany();
+  const user = useUser();
+
   // falta setear los datos del usuario que crea el invoice (address, firma, logo)
   const [showNote, setShowNote] = useState(false);
   const [note, setNote] = useState("");
@@ -35,6 +40,16 @@ export default function Invoice() {
       return;
     }
 
+    if (!activeCompany) {
+      alert("No active company selected.");
+      return;
+    }
+
+    if (!user) {
+      alert("User not authenticated.");
+      return;
+    }
+
     const createInvoicePayload: CreateInvoicePayload = {
       invoiceNumber: `INV-${Date.now()}`,
       subtotal,
@@ -45,8 +60,8 @@ export default function Invoice() {
       notes: note,
       billToAddressId: selectedRecipient.address.id,
       shipToAddressId: selectedRecipient.address.id,
-      userId: "d2bf5015-cd42-410f-a4d5-05f033012e03",
-      companyId: "730af3a5-f1eb-4d7b-99dd-71f5f34da524",
+      userId: user.id,
+      companyId: activeCompany.id,
       recipientId: selectedRecipient.id,
       items: data.map((item) => ({
         description: item.description,

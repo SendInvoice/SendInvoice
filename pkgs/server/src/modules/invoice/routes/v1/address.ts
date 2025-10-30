@@ -7,30 +7,45 @@ type Params = {
   id: string;
 };
 
-export const apiV1AddressRouter: FastifyPluginCallback = (fastify: FastifyInstance, _, done) => {
+type DefaultQuery = {
+  companyId?: string;
+};
 
-  fastify.get('/', async (_, reply) => {
-    const allAddresses = await fastify.domain.invoice.address.find();
+export const apiV1AddressRouter: FastifyPluginCallback = (fastify: FastifyInstance, _, done) => {
+  fastify.get<{ Querystring: DefaultQuery }>('/', async (request, reply) => {
+    const companyId = request.query.companyId;
+
+    if (!companyId) {
+      return reply.status(400).send({ message: 'companyId query parameter is required' });
+    }
+
+    const allAddresses = await fastify.domain.invoice.address.find({
+      companyId,
+    });
 
     return reply.status(200).send(allAddresses);
   });
 
-  fastify.get<{ Params: Params }>('/:id', {preHandler: validateUUID()}, async (request, reply) => {
-    try {
-      const { id } = request.params;
-      const address = await fastify.domain.invoice.address.findById(id);
+  fastify.get<{ Params: Params }>(
+    '/:id',
+    { preHandler: validateUUID() },
+    async (request, reply) => {
+      try {
+        const { id } = request.params;
+        const address = await fastify.domain.invoice.address.findById(id);
 
-      if (!address) {
-        request.log.info(`Address not found for id: ${id}`);
-        return reply.status(404).send({ message: 'Address not found' });
+        if (!address) {
+          request.log.info(`Address not found for id: ${id}`);
+          return reply.status(404).send({ message: 'Address not found' });
+        }
+
+        return reply.status(200).send(address);
+      } catch (err) {
+        request.log.error({ err }, 'Error while fetching address');
+        return reply.status(500).send({ message: 'Internal server error' });
       }
-
-      return reply.status(200).send(address);
-    } catch (err) {
-      request.log.error({ err }, 'Error while fetching address');
-      return reply.status(500).send({ message: 'Internal server error' });
     }
-  });
+  );
 
   fastify.post('/', async (request, reply) => {
     const reqBody = request.body as CreateAddressDto;
@@ -39,38 +54,44 @@ export const apiV1AddressRouter: FastifyPluginCallback = (fastify: FastifyInstan
     return reply.status(201).send(result);
   });
 
+  fastify.put<{ Params: Params; Body: Partial<Address> }>(
+    '/:id',
+    { preHandler: validateUUID() },
+    async (request, reply) => {
+      const { id } = request.params;
+      const data = request.body;
 
-  fastify.put<{ Params: Params; Body: Partial<Address> }>('/:id', {preHandler: validateUUID()}, async (request, reply) => {
-    const { id } = request.params;
-    const data = request.body;
+      try {
+        const updated = await fastify.domain.invoice.address.updateById(id, data);
+        if (!updated)
+          return reply.status(404).send({ message: 'Address not found or not updated' });
 
-    try {
-      const updated = await fastify.domain.invoice.address.updateById(id, data);
-      if (!updated) return reply.status(404).send({ message: 'Address not found or not updated' });
+        return reply.status(200).send(updated);
+      } catch (error) {
+        request.log.error({ error }, 'Error updating company');
 
-      return reply.status(200).send(updated);
-
-    } catch (error) {
-      request.log.error({ error }, 'Error updating company');
-
-      return reply.status(500).send({ message: 'Internal server error' });
+        return reply.status(500).send({ message: 'Internal server error' });
+      }
     }
-  });
+  );
 
-  fastify.delete<{ Params: Params }>('/:id', {preHandler: validateUUID()}, async (request, reply) => {
-    const { id } = request.params;
-    
-    try {
-      const deleted = await fastify.domain.invoice.address.deleteById(id);
-      if (!deleted) return reply.status(404).send({ message: 'Address not found' });
+  fastify.delete<{ Params: Params }>(
+    '/:id',
+    { preHandler: validateUUID() },
+    async (request, reply) => {
+      const { id } = request.params;
 
-      return reply.status(200).send({ message: 'Address deleted successfully' });
-    } catch (error) {
-      request.log.error({ error }, 'Error deleting address');
-      return reply.status(500).send({ message: 'Internal server error' });
+      try {
+        const deleted = await fastify.domain.invoice.address.deleteById(id);
+        if (!deleted) return reply.status(404).send({ message: 'Address not found' });
+
+        return reply.status(200).send({ message: 'Address deleted successfully' });
+      } catch (error) {
+        request.log.error({ error }, 'Error deleting address');
+        return reply.status(500).send({ message: 'Internal server error' });
+      }
     }
-  });
+  );
 
   done();
 };
-

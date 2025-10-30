@@ -57,6 +57,7 @@ export function UserContextProvider({ children }: Props): JSX.Element {
       const user = await sendInvoiceClient.auth.whoAmI(token);
 
       setUser(user);
+      setToken(token);
     }
   };
 

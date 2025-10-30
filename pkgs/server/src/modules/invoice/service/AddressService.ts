@@ -19,8 +19,15 @@ export class AddressService {
     this.addressRepository = AddressRepository;
   }
 
-  public async find(): Promise<Entity.Address[]> {
-    const addresses = this.addressRepository.find();
+  public async find(query: { companyId: string; }): Promise<Entity.Address[]> {
+    const addresses = this.addressRepository.find({
+      where: {
+        companies: {
+          id: query.companyId
+        }
+      }
+    });
+
     return addresses;
   }
 

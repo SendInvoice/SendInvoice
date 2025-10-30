@@ -1,7 +1,5 @@
 import {
-  validateCompanyId,
   validateItemId,
-  validateUserId,
   validateUUID
 } from '../../../../utils/uuid';
 
@@ -22,10 +20,22 @@ type InvoiceParams = {
   id: string;
 };
 
+type DefaultQuery = {
+  companyId?: string;
+};
+
 export const apiV1InvoiceRouter: FastifyPluginCallback = (fastify: FastifyInstance, _, done) => {
 
-  fastify.get('/', async (_, reply) => {
-    const invoices = await fastify.domain.invoice.find();
+  fastify.get<{ Querystring: DefaultQuery }>('/', async (request, reply) => {
+    const companyId = request.query.companyId;
+
+    if (!companyId) {
+      return reply.status(400).send({ message: 'companyId query parameter is required' });
+    }
+
+    const invoices = await fastify.domain.invoice.find({
+      companyId
+    });
     return reply.status(200).send(invoices);
   });
 

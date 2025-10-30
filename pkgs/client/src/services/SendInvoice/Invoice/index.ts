@@ -69,14 +69,16 @@ export class InvoiceClient {
         this.recipient = new RecipientClient(baseUrl);
     }
 
-    async getInvoices(): Promise<Invoice[]> {
+    async getInvoices(token: string, companyId: string): Promise<Invoice[]> {
         const url = new URL(this.baseUrl);
-        url.pathname = `/api/v1/invoice`;
+        url.pathname = '/api/v1/invoice';
+        url.searchParams.set('companyId', companyId);
 
         const response = await fetch(url, {
             method: 'GET',
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${token}`,
             },
         });
 

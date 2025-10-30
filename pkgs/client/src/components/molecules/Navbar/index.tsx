@@ -1,5 +1,5 @@
 import { UserContext } from "../../../contexts/UserContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useUser } from "../../../hooks/user";
 
 import {
@@ -25,6 +25,14 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    if (Array.isArray(companies) && !activeCompany) {
+      if (companies.length > 0) {
+        activeCompanySetter?.(companies[0].id);
+      }
+    }
+  }, [companies, activeCompany, activeCompanySetter]);
 
   const handleLogOut = async () => {
     userContext?.logout();
@@ -54,6 +62,7 @@ export default function Navbar() {
           onClick={toggleCompanyDropdown}
         >
           <FaBuilding className="company-icon" />
+          {activeCompany ? activeCompany.name : 'No Company Selected'}
           <FaChevronDown
             className={`chevron-icon ${isCompanyDropdownOpen ? "chevron-open" : ""}`}
           />
@@ -68,7 +77,7 @@ export default function Navbar() {
               <p className="company-id-dropdown">
                 {activeCompany ? `ID: ${activeCompany.id}` : 'Please select a company'}
               </p>
-              
+
               <div className="company-list-dropdown">
                 {companies && companies.length > 0 ? (
                   companies.map((company) => (
@@ -84,7 +93,7 @@ export default function Navbar() {
                   <p className="no-companies-text">No companies available.</p>
                 )}
               </div>
-              
+
               <Button
                 className="create-company-button-dropdown"
                 onClick={() => {
