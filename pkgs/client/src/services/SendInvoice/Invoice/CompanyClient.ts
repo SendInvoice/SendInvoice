@@ -19,8 +19,8 @@ export type Company = {
 export type CreateCompanyPayload = {
   name: string;
   phone: string;
-  logoId: string;
-  signatureId: string;
+  logoId?: string;
+  signatureId?: string;
   userId: string;
   addressId: string;
 };
@@ -102,16 +102,23 @@ export class CompanyClient {
       throw new Error("Address ID is required");
     }
 
+    const filteredPayload = Object.fromEntries(
+      Object.entries(payload).filter(
+        ([, value]) => value !== "" && value !== undefined && value !== null,
+      ),
+    );
+
     const url = new URL(this.baseUrl);
     url.pathname = `/api/v1/invoice/company`;
-
+    
+    console.log("Payload enviado a /company:", filteredPayload);
     const response = await fetch(url, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(filteredPayload),
     });
 
     if (response.ok) {
@@ -146,12 +153,6 @@ export class CompanyClient {
     }
     if (payload.phone !== undefined && !payload.phone.trim()) {
       throw new Error("Phone cannot be empty");
-    }
-    if (payload.logo !== undefined && !payload.logo.trim()) {
-      throw new Error("Logo cannot be empty");
-    }
-    if (payload.signature !== undefined && !payload.signature.trim()) {
-      throw new Error("Signature cannot be empty");
     }
 
     const url = new URL(this.baseUrl);

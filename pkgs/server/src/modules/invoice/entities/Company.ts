@@ -45,13 +45,13 @@ export class Company {
   @OneToMany(() => Invoice, (invoice) => invoice.company)
   invoices: Relation<Invoice[]>;
 
-  @OneToOne(() => Image)
+  @OneToOne(() => Image, { nullable: true })
   @JoinColumn()
-  logo: Relation<Image>;
+  logo?: Relation<Image>;
 
-  @OneToOne(() => Image)
+  @OneToOne(() => Image, { nullable: true })
   @JoinColumn()
-  signature: Relation<Image>;
+  signature?: Relation<Image>;
 
   @DeleteDateColumn({ nullable: true })
   deletedAt?: Date;

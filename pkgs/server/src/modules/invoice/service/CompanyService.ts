@@ -7,8 +7,8 @@ import type { ImageService } from '../../image';
 export type CreateCompanyDto = {
   name: string;
   phone: string;
-  logoId: string;
-  signatureId: string;
+  logoId?: string;
+  signatureId?: string;
   userId: string;
   addressId: string;
 };
@@ -41,22 +41,24 @@ export class CompanyService {
   public async createCompany(dto: CreateCompanyDto): Promise<Entity.Company> {
     const company = new Company();
 
-    const logo = await this.imageService.findById(dto.logoId);
-
-    if (!logo) {
-      throw new Error('Logo image not found');
+    if (dto.logoId && dto.logoId.trim() !== '') {
+      const logo = await this.imageService.findById(dto.logoId);
+      if (!logo) {
+        throw new Error('Logo image not found');
+      }
+      company.logo = logo;
     }
 
-    const signature = await this.imageService.findById(dto.signatureId);
-
-    if (!signature) {
-      throw new Error('Signature image not found');
+    if (dto.signatureId && dto.signatureId.trim() !== '') {
+      const signature = await this.imageService.findById(dto.signatureId);
+      if (!signature) {
+        throw new Error('Signature image not found');
+      }
+      company.signature = signature;
     }
 
     company.name = dto.name;
     company.phone = dto.phone;
-    company.logo = logo;
-    company.signature = signature;
 
     company.user = { id: dto.userId } as any;
     company.address = { id: dto.addressId } as any;
