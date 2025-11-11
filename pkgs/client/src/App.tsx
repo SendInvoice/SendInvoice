@@ -14,6 +14,7 @@ import { UserContextProvider } from "./contexts/UserContext";
 import AuthLayout from "./components/templates/AuthLayout";
 import Company from "./pages/Company";
 import { CompanyContextProvider } from "./contexts/CompanyContext";
+import UpdateRecipient from "./pages/Recipient/UpdateRecipient";
 
 function App() {
   return (
@@ -29,10 +30,7 @@ function App() {
                   path="/recipient"
                   element={<Recipient recipients={[]} />}
                 />
-                {/* <Route
-                          path="/update-recipient/:id"
-                          element={<UpdateRecipient />}
-                        /> */}
+                <Route path="/update-recipient/:id" element={<UpdateRecipient />}/>
                 <Route path="/new-recipient" element={<NewRecipients />} />
                 <Route path="/invoice" element={<Invoice />} />
                 <Route path="/sender" element={<Company />} />

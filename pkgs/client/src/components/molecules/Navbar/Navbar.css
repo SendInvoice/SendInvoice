@@ -10,6 +10,8 @@
 
 .navbar-links {
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 0.5rem;
 }
 
@@ -53,9 +55,18 @@
   transform: none;
 }
 
-.user-dropdown,
+.user-dropdown{
+  position: relative;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
 .company-dropdown {
   position: relative;
+  display: flex;
+  justify-content: start;
+  align-items: center;
 }
 
 .user-icon,

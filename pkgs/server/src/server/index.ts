@@ -11,7 +11,11 @@ import type { IUser } from '../modules/user/entity';
 export async function makeServer(): Promise<FastifyInstance> {
   const server = fastify({ logger: true });
 
-  await server.register(multipart);
+ await server.register(multipart, {
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+  });
   await server.register(domainServicesPlugin);
   await server.register(apiV1RouterPlugin);
   await server.register(cors, {
