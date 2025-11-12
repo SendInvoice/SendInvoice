@@ -13,12 +13,14 @@ import { AddressService } from '../../modules/invoice/service/AddressService';
 import { CompanyService } from '../../modules/invoice/service/CompanyService';
 import { RecipientService } from '../../modules/invoice/service/RecipientService';
 import { ImageService } from '../../modules/image/service';
+import { LatexCompilerService } from '../../services/LatexCompilerService';
 
 export type DomainServices = {
   auth: AuthService;
   image: ImageService;
   invoice: InvoiceService;
   user: UserService;
+  latexCompiler: LatexCompilerService;
 };
 
 export const DOMAIN_SERVICES_PLUGIN_NAME = 'domain';
@@ -79,12 +81,14 @@ export const domainServicesPlugin = fp(async (server) => {
       companyService,
       recipientService
     );
+    const latexCompilerService = new LatexCompilerService(config.latexCompilerServerUrl);
 
     const domainServices: DomainServices = {
       auth: authService,
       invoice: invoiceService,
       image: imageService,
-      user: userService
+      user: userService,
+      latexCompiler: latexCompilerService,
     };
 
     server.decorate(DOMAIN_SERVICES_PLUGIN_NAME, domainServices);
